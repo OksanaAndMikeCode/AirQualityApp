@@ -46,10 +46,20 @@ app.getCityData = (city, state) => {
     });
 };
 
+let selectedProvince;
+app.grabInput = () => {
+    selectedProvince = $('.province').children("option:selected").val();
+    alert("You have selected the province - " + selectedProvince);
+    console.log(selectedProvince);
+    app.getCitiesArray(selectedProvince);
+    app.getCityData('Toronto', selectedProvince);
+
+};
+
+
 //Creating an init function
 app.init = function() {
-    app.getCitiesArray('Ontario');
-    app.getCityData('Toronto', 'Ontario');
+    $(".province").change(app.grabInput);
 };
 
 //Creating document ready
