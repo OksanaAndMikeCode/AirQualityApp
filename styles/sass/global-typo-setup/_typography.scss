@@ -1,0 +1,45 @@
+// just here as an example 
+
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Monoton&family=Oxanium:wght@500&display=swap');
+
+h1 {
+  font-family: 'Monoton', cursive;
+  font-size: createVW($h1FontSize);
+
+  @include mediaQ(fullscreen) {
+    font-size: createREM($h1FontSize);
+  }
+}
+
+h2 {
+  font-family: 'Monoton', cursive;
+  font-size: createVW($h2FontSize);
+  text-align: center;
+  margin-bottom: 5vw;
+  color: #5CD3FF; 
+
+  @include mediaQ(fullscreen) {
+    font-size: createREM($h2FontSize);
+    margin-bottom: 2rem;
+  }
+}
+
+h3 {
+  font-family: 'Oxanium', cursive;
+  font-size: createVW($h3FontSize);
+  color: #5CD3FF; 
+
+  @include mediaQ(fullscreen) {
+    font-size: createREM($h3FontSize);
+  }
+}
+
+
+p {
+  font-family: 'Audiowide', cursive;
+  font-size: createVW($bodyFontSize);
+
+  @include mediaQ(fullscreen) {
+    font-size: createREM($bodyFontSize);
+  }
+}

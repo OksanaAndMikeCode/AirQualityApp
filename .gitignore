@@ -1,2 +1,3 @@
-# .vscode/
-/sass/
+.vscode/
+# sass
+# left SASS alone until we are ready to submit final

@@ -239,6 +239,43 @@ html {
   font-size: 62.5%;
 }
 
+.innerWrapper {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.headerSettings {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: scroll;
+  height: 100%;
+  width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
 h1 {
   font-size: 20rem;
 }
