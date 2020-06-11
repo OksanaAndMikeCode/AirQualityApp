@@ -1,0 +1,43 @@
+// media queries
+// mobile first design
+
+@mixin media($media) {
+  @if $media == mobile {
+    @media only screen and (min-width: 768px) { @content; } 
+  } @else if $media == tablet {
+    @media only screen and (min-width: 769px) { @content; }
+  } @else if $media == fullscreen {
+    @media only screen and (min-width: 1000px) { @content; }
+  }
+}
+
+@mixin innerWrapper {
+  max-width: ($maxWidth * 1px);
+  height: 100%;
+  margin: 0 auto;
+}
+
+@mixin headerSettings {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: scroll;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin relative {
+  position: relative;
+}
+
+@mixin absolute {
+  position: absolute;
+}
+
+@mixin flex {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin grid {
+  display: grid;
+}

@@ -1,0 +1,24 @@
+// HTML class properties 
+.innerWrapper {
+  @include innerWrapper();
+}
+
+.headerSettings {
+  @include headerSettings();
+}
+
+.relative {
+  @include relative();
+}
+
+.absolute {
+  @include absolute();
+}
+
+.flex {
+  @include flex();
+}
+
+.grid {
+  @include grid();
+}
