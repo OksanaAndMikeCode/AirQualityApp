@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Air Quality App</title>
   <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+
 </head>
+
 <body>
-  <h1>test!</h1>
+  <h2>labels</h2>
   <label for="province">Choose a province:</label>
   <select class="province" name="province" id="province" required="">
-      <option value="">Prov</option>
-      <option value="Ontario">ON</option>
-      <option value="BC">BC</option>
-      <option value="QC">QC</option>
-      <option value="NS">NS</option>
-      <option value="NB">NB</option>
-      <option value="AB">AB</option>
-      <option value="PE">PE</option>
-      <option value="SK">SK</option>
-      <option value="NL">NL</option>
-      <option value="MB">MB</option>
-      <option value="NT">NT</option>
-      <option value="YT">YT</option>
-      <option value="NU">NU</option>
+    <option value="">Prov</option>
+    <option value="Ontario">ON</option>
+    <option value="BC">BC</option>
+    <option value="QC">QC</option>
+    <option value="NS">NS</option>
+    <option value="NB">NB</option>
+    <option value="AB">AB</option>
+    <option value="PE">PE</option>
+    <option value="SK">SK</option>
+    <option value="NL">NL</option>
+    <option value="MB">MB</option>
+    <option value="NT">NT</option>
+    <option value="YT">YT</option>
+    <option value="NU">NU</option>
   </select>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <h2>map</h2>
+  <div id="map"></div>
 
-  <!-- included the most up to date jQuery version -->
-  <script src='https://code.jquery.com/jquery-3.4.0.min.js' integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>
-  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+
+  <script src='https://code.jquery.com/jquery-3.4.0.min.js'
+    integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>
+
   <script src='./apps/apps.js'></script>
+
 </body>
+
 </html>

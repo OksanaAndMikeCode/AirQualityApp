@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Monoton&family=Oxanium:wght@500&display=swap");
 html {
   line-height: 1.15;
   -ms-text-size-adjust: 100%;
@@ -239,6 +240,54 @@ html {
   font-size: 62.5%;
 }
 
+h1 {
+  font-family: 'Monoton', cursive;
+  font-size: 2.5vw;
+}
+
+@media only screen and (min-width: 1000px) {
+  h1 {
+    font-size: 15rem;
+  }
+}
+
+h2 {
+  font-family: 'Monoton', cursive;
+  font-size: 2vw;
+  margin-bottom: 1vw;
+  color: #5CD3FF;
+}
+
+@media only screen and (min-width: 1000px) {
+  h2 {
+    font-size: 12rem;
+    margin-bottom: 2rem;
+  }
+}
+
+h3 {
+  font-family: 'Oxanium', cursive;
+  font-size: 1.66667vw;
+  color: #5CD3FF;
+}
+
+@media only screen and (min-width: 1000px) {
+  h3 {
+    font-size: 10rem;
+  }
+}
+
+p {
+  font-family: 'Audiowide', cursive;
+  font-size: 1.5vw;
+}
+
+@media only screen and (min-width: 1000px) {
+  p {
+    font-size: 9rem;
+  }
+}
+
 .innerWrapper {
   max-width: 1200px;
   height: 100%;
@@ -278,4 +327,10 @@ html {
 
 h1 {
   font-size: 20rem;
+}
+
+#map {
+  width: 80vw;
+  height: 60vh;
+  margin: 0 auto;
 }

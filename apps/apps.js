@@ -60,6 +60,32 @@ app.grabInput = () => {
 //Creating an init function
 app.init = function() {
     $(".province").change(app.grabInput);
+
+    /////////////////////////
+    // LEAFLET MAP
+    const map = L.map('map').setView([58, -100], 4);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([55, -100]).addTo(map)
+      .bindPopup('Canada.<br> Air Quality App.')
+      .openPopup();
+
+      L.marker([43.651893, -79.381713]).addTo(map)
+      .bindPopup('Toronto')
+      .openPopup();
+
+      L.marker([45.420421, -75.692432]).addTo(map)
+      .bindPopup('Ottawa')
+      .openPopup();
+
+      L.marker([49.900496, -97.139309]).addTo(map)
+      .bindPopup('Winnipeg')
+      .openPopup();
+    /////////////////////////
+
 };
 
 //Creating document ready
