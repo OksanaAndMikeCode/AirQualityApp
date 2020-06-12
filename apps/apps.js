@@ -28,15 +28,40 @@ app.getCitiesArray = (state) => {
                 // console.log(arrayItem.city);
             });
             console.log(citiesArray.join(`,${abbreviation},`));
+                // app.getLonLat(citiesJoined);
+            // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
+            citiesArray.forEach((city) => {
+                app.getLatLng(`${city},${abbreviation}`);
+            });
         })
         .fail(function () {
             alert('Sorry, cities cannot be found');
         });
 };
 
-// app.getLatLng = (citiesArray) => {
+let latitude;
+let longitude;
+app.getLatLng = (citiesString) => {
+    $.ajax({
+        url: "http://www.mapquestapi.com/geocoding/v1/batch",
+        method: 'GET',
+        dataType: 'json',
+        data: {
+            key: app.mapApiKey,
+            location: citiesString,
+        }
+    }).then(function(response) {
+        // got a precise response
+        latitude = response.results[0].locations[0].displayLatLng.lat;
+        longitude = response.results[0].locations[0].displayLatLng.lng;
+        console.log(`${response.results[0].providedLocation.location}: Latitude is ${response.results[0].locations[0].displayLatLng.lat}, longitude is ${response.results[0].locations[0].displayLatLng.lng}`);
+        return latitude, longitude;
+    })
+    .fail(function() {
+        console.log('Lon Lat Response failed');
+    });
+};
 
-// }
 let abbreviation;
 // creating a function to get the chosen province name abbreviation
 app.getProvinceAbbrev = function() {
