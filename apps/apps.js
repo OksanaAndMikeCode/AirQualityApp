@@ -27,7 +27,7 @@ app.getCitiesArray = (state) => {
                 $('ul').append(`<li><span class="fa fa-square-o"></span>${arrayItem.city}</li>`);
                 // console.log(arrayItem.city);
             });
-            console.log(citiesArray);
+            console.log(citiesArray.join(`,${abbreviation},`));
         })
         .fail(function () {
             alert('Sorry, cities cannot be found');
@@ -37,6 +37,12 @@ app.getCitiesArray = (state) => {
 // app.getLatLng = (citiesArray) => {
 
 // }
+let abbreviation;
+// creating a function to get the chosen province name abbreviation
+app.getProvinceAbbrev = function() {
+    abbreviation = $('.province').children("option:selected").text();
+    return abbreviation;
+}
 
 // creating a function to pass the clicked city to the API for Air Quality
 app.grabLiText = function() {
@@ -59,7 +65,6 @@ app.getCityData = (city, state) => {
                 key: app.airApiKey,
             }
         }).then(function (response) {
-            // console.log('Yay, I got a response', response.data.current.pollution.aqius);
             console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
         })
         .fail(function () {
@@ -81,6 +86,7 @@ app.grabInput = () => {
 
 //Creating an init function
 app.init = function () {
+    $(".province").change(app.getProvinceAbbrev);
     $(".province").change(app.grabInput);
     $('ul').on('click', 'li', app.grabLiText);
 
