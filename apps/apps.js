@@ -1,6 +1,12 @@
 //Namespacing
 const app = {};
 
+// Creating an object to store all data on the chosen city
+app.dataObj = {};
+
+// Creating an array to store latitude and longitude of all cities in the chosen province
+app.LatLngArray = [];
+
 //Storing api key in a variable
 app.airApiKey = '69bdebb7-8ed2-400a-bcd2-24b56bacb155';
 app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
@@ -30,9 +36,10 @@ app.getCitiesArray = (state) => {
             console.log(citiesArray.join(`,${abbreviation},`));
                 // app.getLonLat(citiesJoined);
             // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
-            citiesArray.forEach((city) => {
+            citiesArray.forEach ((city) => {
                 app.getLatLng(`${city},${abbreviation}`);
             });
+            console.log(app.LatLngArray);
         })
         .fail(function () {
             alert('Sorry, cities cannot be found');
@@ -54,8 +61,11 @@ app.getLatLng = (citiesString) => {
         // got a precise response
         latitude = response.results[0].locations[0].displayLatLng.lat;
         longitude = response.results[0].locations[0].displayLatLng.lng;
+
+        app.LatLngArray.push(response.results[0].providedLocation.location, latitude, longitude);
+        latitude = response.results[0].locations[0].displayLatLng.lat;
+        longitude = response.results[0].locations[0].displayLatLng.lng;
         console.log(`${response.results[0].providedLocation.location}: Latitude is ${response.results[0].locations[0].displayLatLng.lat}, longitude is ${response.results[0].locations[0].displayLatLng.lng}`);
-        return latitude, longitude;
     })
     .fail(function() {
         console.log('Lon Lat Response failed');
@@ -90,7 +100,20 @@ app.getCityData = (city, state) => {
                 key: app.airApiKey,
             }
         }).then(function (response) {
+            app.dataObj = {
+                city: city,
+                province: state,
+                pollution: response.data.current.pollution.aqius,
+                temperature: response.data.current.weather.tp,
+                humidity: response.data.current.weather.hu,
+                precipitation: response.data.current.weather.pr,
+                wind: response.data.current.weather.wd,
+                windSpeed: response.data.current.weather.ws,
+                lat: response.data.location.coordinates[1],
+                lng: response.data.location.coordinates[0],
+            };
             console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
+            console.log(app.dataObj);
         })
         .fail(function () {
             alert('Sorry, your city cannot be found');
