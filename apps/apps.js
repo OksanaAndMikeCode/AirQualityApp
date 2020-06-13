@@ -26,7 +26,7 @@ app.getCitiesArray = (state) => {
                 key: app.airApiKey,
             }
         }).then(function (response) {
-            console.log('Yay, I got a response', response.data[0]);
+            // console.log('Yay, I got a response', response.data[0]);
             // const provResp = response.data[0].city;
             const citiesArray = [];
             response.data.forEach((arrayItem) => {
@@ -34,46 +34,54 @@ app.getCitiesArray = (state) => {
                 $('ul').append(`<li><span class="fa fa-square-o"></span>${arrayItem.city}</li>`);
                 // console.log(arrayItem.city);
             });
+            // console.log(citiesArray);
 
+            // MC 06-13 12:15: MAYBE THIS CAN BE DONE CLEANER, BUT IT'S WORKING NOW
+            // const citiesStringArray = [];
+            // const joinStrArr = [];
 
-
-            console.log(citiesArray.join().split(' ').join('+').split(',').join(`,${abbreviation}&`));
-            // MC JN-12 - 21:20: 
-            // result:  ...Regina,SK&Saskatoon,SK&Swift+Current  
-            // but ABBR is not at the end of the string
-                
+            // MC 06-13 12:15: push '+' between each city (to be removed), so as not to confuse with ','
+            // citiesStringArray.push(citiesArray.join('+'));
             
-            // app.getLonLat(citiesJoined);
-               
-                // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
-                citiesArray.forEach ((city) => {
-                  // app.getLatLng(`${city},${abbreviation}`);
-                  app.getLatLng((`${city},${abbreviation}&`).split(' ').join('+'));
-  // MC JN-12 - 21:20: this hasn't been completed
+            // MC 06-13 12:15: push one abbreviation to end of array, because last item did not have a comma at the end, therefore was not receiving abbreviation
+            // citiesStringArray.push(`${abbreviation}`);
+            
+            // MC 06-13 12:15: NEW ARRAY -joinStrArray- pull from OLD ARRAY split at '+' and add `,${abbreviation}&`
+            // joinStrArr.push(citiesStringArray.join().split('+').join(`,${abbreviation}&`));
 
+            // console.log(citiesStringArray);
+            // console.log(joinStrArr);
+            
+            // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
+            // joinStrArr.forEach((str) => {
+            // MC 06-13 12:15: now this deconstructs array (with one string item) and sends it to getLatLng
+                // app.getLatLng(str);
+
+            citiesArray.forEach((city) => {
+            // MC 06-13 12:45: sending multiple city,PR pairs to mapquest API
+                app.getLatLng(`${city},${abbreviation}`);
             });
-            // console.log(app.latLngArray);
- 
-            
         })
         .fail(function () {
             alert('Sorry, cities cannot be found');
         });
 };
 
+let loc;
 let lat;
 let lng;
 // MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
     $.ajax({
-        url: "http://www.mapquestapi.com/geocoding/v1/batch",
-        method: 'GET',
-        dataType: 'json',
-        data: {
-            key: app.mapApiKey,
-            location: citiesString,
-        }
-    }).then(function(response) {
+            url: "http://www.mapquestapi.com/geocoding/v1/batch",
+            method: 'GET',
+            dataType: 'json',
+            data: {
+                key: app.mapApiKey,
+                location: citiesString,
+            }
+        })
+        .then(function(response) {
         // got a precise response
         loc = response.results[0].providedLocation.location;
         lat = response.results[0].locations[0].displayLatLng.lat;
@@ -86,7 +94,7 @@ app.getLatLng = (citiesString) => {
         // MC JN-12 - 21:20: put results into an object, and they are pushed to the array for easier deconstructing
     
         // MC JN-12 - 21:20: started to create a function to push relevant information into a popup
-        app.displayPopup();
+        // app.displayPopup();
         console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
     })
     .fail(function() {
