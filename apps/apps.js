@@ -5,7 +5,8 @@ const app = {};
 app.dataObj = {};
 
 // Creating an array to store latitude and longitude of all cities in the chosen province
-app.LatLngArray = [];
+app.latLngArray = [];
+// MC JN-12 - 21:20: changed the name above because it was capitalized 'LatLng'
 
 //Storing api key in a variable
 app.airApiKey = '69bdebb7-8ed2-400a-bcd2-24b56bacb155';
@@ -33,21 +34,36 @@ app.getCitiesArray = (state) => {
                 $('ul').append(`<li><span class="fa fa-square-o"></span>${arrayItem.city}</li>`);
                 // console.log(arrayItem.city);
             });
-            console.log(citiesArray.join(`,${abbreviation},`));
-                // app.getLonLat(citiesJoined);
-            // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
-            citiesArray.forEach ((city) => {
-                app.getLatLng(`${city},${abbreviation}`);
+
+
+
+            console.log(citiesArray.join().split(' ').join('+').split(',').join(`,${abbreviation}&`));
+            // MC JN-12 - 21:20: 
+            // result:  ...Regina,SK&Saskatoon,SK&Swift+Current  
+            // but ABBR is not at the end of the string
+                
+            
+            // app.getLonLat(citiesJoined);
+               
+                // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
+                citiesArray.forEach ((city) => {
+                  // app.getLatLng(`${city},${abbreviation}`);
+                  app.getLatLng((`${city},${abbreviation}&`).split(' ').join('+'));
+  // MC JN-12 - 21:20: this hasn't been completed
+
             });
-            console.log(app.LatLngArray);
+            // console.log(app.latLngArray);
+ 
+            
         })
         .fail(function () {
             alert('Sorry, cities cannot be found');
         });
 };
 
-let latitude;
-let longitude;
+let lat;
+let lng;
+// MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
     $.ajax({
         url: "http://www.mapquestapi.com/geocoding/v1/batch",
@@ -59,18 +75,30 @@ app.getLatLng = (citiesString) => {
         }
     }).then(function(response) {
         // got a precise response
-        latitude = response.results[0].locations[0].displayLatLng.lat;
-        longitude = response.results[0].locations[0].displayLatLng.lng;
+        loc = response.results[0].providedLocation.location;
+        lat = response.results[0].locations[0].displayLatLng.lat;
+        lng = response.results[0].locations[0].displayLatLng.lng;
+        // MC JN-12 - 21:20: renamed loc, lat, lng
 
-        app.LatLngArray.push(response.results[0].providedLocation.location, latitude, longitude);
-        latitude = response.results[0].locations[0].displayLatLng.lat;
-        longitude = response.results[0].locations[0].displayLatLng.lng;
-        console.log(`${response.results[0].providedLocation.location}: Latitude is ${response.results[0].locations[0].displayLatLng.lat}, longitude is ${response.results[0].locations[0].displayLatLng.lng}`);
+
+        // pushes response into an array as objects
+        app.latLngArray.push({loc, lat, lng});
+        // MC JN-12 - 21:20: put results into an object, and they are pushed to the array for easier deconstructing
+    
+        // MC JN-12 - 21:20: started to create a function to push relevant information into a popup
+        app.displayPopup();
+        console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
     })
     .fail(function() {
-        console.log('Lon Lat Response failed');
+        console.log('Lat Lng Response failed');
     });
 };
+
+// app.displayPopup = function(response) {
+//   console.log(response);
+  
+//   L.marker([`${lat}, ${lng}`]).bindPopup(`${chosenCity}${dataObj}`);
+// };
 
 let abbreviation;
 // creating a function to get the chosen province name abbreviation
@@ -85,7 +113,6 @@ app.grabLiText = function() {
     console.log(chosenCity);
     app.getCityData(chosenCity, selectedProvince);
 };
-
 
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
 app.getCityData = (city, state) => {
@@ -127,8 +154,6 @@ app.grabInput = () => {
     console.log(selectedProvince);
     app.getCitiesArray(selectedProvince);
     // app.getCityData('Toronto', selectedProvince);
-
-
 };
 
 
