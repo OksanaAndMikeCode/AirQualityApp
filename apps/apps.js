@@ -47,8 +47,11 @@ app.getCitiesArray = (state) => {
                
                 // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
                 citiesArray.forEach ((city) => {
-                  // app.getLatLng(`${city},${abbreviation}`);
-                  app.getLatLng((`${city},${abbreviation}&`).split(' ').join('+'));
+
+                // OS JN-13 - 11:19: changed to previous state so that we can see popups
+                  app.getLatLng(`${city},${abbreviation}`);
+
+                //   app.getLatLng((`${city},${abbreviation}&`).split(' ').join('+'));
   // MC JN-12 - 21:20: this hasn't been completed
 
             });
@@ -63,6 +66,7 @@ app.getCitiesArray = (state) => {
 
 let lat;
 let lng;
+let loc;
 // MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
     $.ajax({
@@ -86,7 +90,15 @@ app.getLatLng = (citiesString) => {
         // MC JN-12 - 21:20: put results into an object, and they are pushed to the array for easier deconstructing
     
         // MC JN-12 - 21:20: started to create a function to push relevant information into a popup
-        app.displayPopup();
+        // app.displayPopup();
+
+        // OS JN-13 - 11:17: adding popups of cities in the selected province using the lat lng data received from mapquest  
+        for (let i = 0; i < app.latLngArray.length; i++) {
+            // console.log(i);
+            L.marker([app.latLngArray[i].lat, app.latLngArray[i].lng]).addTo(map)
+                .bindPopup(app.latLngArray[i].loc)
+                .openPopup()
+        }
         console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
     })
     .fail(function() {
@@ -157,6 +169,9 @@ app.grabInput = () => {
 };
 
 
+// OS JN-13 - 11:17: declared map in the global scope so that other functions can access it
+let map;
+
 //Creating an init function
 app.init = function () {
     $(".province").change(app.getProvinceAbbrev);
@@ -171,7 +186,7 @@ app.init = function () {
   
     /////////////////////////
     // LEAFLET MAP: INITIALIZATION
-    const map = L.map('map').setView([60, -95], 4);
+    map = L.map('map').setView([60, -95], 4);
   
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -194,6 +209,9 @@ app.init = function () {
         .openPopup();
     /////////////////////////
 
+    // OS JN-13 - 11:26: trying to make markers react on click, no results so far
+    // $('map').on('click', console.log('hello'));
+    $('L.marker').on("click", console.log('hello'));
 };
 
 //Creating document ready
