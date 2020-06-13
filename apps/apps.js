@@ -32,44 +32,48 @@ app.getCitiesArray = (state) => {
     response.data.forEach((arrayItem) => {
       citiesArray.push(arrayItem.city);
       $('ul').append(`<li><span class="fa fa-square-o"></span>${arrayItem.city}</li>`);
-      // console.log(arrayItem.city);
+      console.log(arrayItem.city);
     });
     // console.log(citiesArray);
 
-    // MC 06-13 12:15: MAYBE THIS CAN BE DONE CLEANER, BUT IT'S WORKING NOW
-    // const citiesStringArray = [];
-    // const joinStrArr = [];
+    // MC JN-13 15:45: reduced the arrays 
 
-    // MC 06-13 12:15: push '+' between each city (to be removed), so as not to confuse with ','
-    // citiesStringArray.push(citiesArray.join('+'));
+    const pushLocEq = [];
+    const mapQString = [];
 
-    // MC 06-13 12:15: push one abbreviation to end of array, because last item did not have a comma at the end, therefore was not receiving abbreviation
-    // citiesStringArray.push(`${abbreviation}`);
-
-    // MC 06-13 12:15: NEW ARRAY -joinStrArray- pull from OLD ARRAY split at '+' and add `,${abbreviation}&`
-    // joinStrArr.push(citiesStringArray.join().split('+').join(`,${abbreviation}&`));
-    // app.getLonLat(citiesJoined);
-
-    // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
+    // MC JN-13 15:45: Shift the first element of the returned array so that it doesn't receive "location=" as it will break the API call. It will be unshifted after the following forEach.
+    const shiftCity = citiesArray.shift();
+    console.log(shiftCity);
+    
+    // MC JN-13 15:45: append the abbreviation to shiftCity and rename it firstCity
+    const firstCity = (`${shiftCity},${abbreviation}`);
+    console.log(firstCity);
+    
+    // MC JN-13 15:45: Loop to add "location=" in front of each city, and abbreviation behind
     citiesArray.forEach((city) => {
-
-        // OS JN-13 - 11:19: changed to previous state so that we can see popups
-        app.getLatLng(`${city},${abbreviation}`);
-
-        //   app.getLatLng((`${city},${abbreviation}&`).split(' ').join('+'));
-        // MC JN-12 - 21:20: this hasn't been completed
-
-        // console.log(citiesStringArray);
-        // console.log(joinStrArr);
-
-        // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
-        // joinStrArr.forEach((str) => {
-        // MC 06-13 12:15: now this deconstructs array (with one string item) and sends it to getLatLng
-        // app.getLatLng(str);
-      })
-      .fail(function () {
-        alert('Sorry, cities cannot be found');
-      });
+      pushLocEq.push(`location=${city},${abbreviation}`);
+    });
+  
+    console.log(pushLocEq);
+    
+    // MC JN-13 15:45: put the firstCity back in front before adding "&" between everything
+    pushLocEq.unshift(firstCity);
+    console.log(pushLocEq);
+    
+    mapQString.push(pushLocEq.join(`&`));
+    
+    console.log(mapQString);
+    
+    // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
+    mapQString.forEach((str) => {
+    // MC JN-13 15:45: now this deconstructs array (with one string item) and sends it to getLatLng
+    app.getLatLng(str);
+    console.log(str);
+    
+    })
+    .fail(function () {
+      alert('Sorry, cities cannot be found');
+    });
   });
 }
 
@@ -78,14 +82,16 @@ let lat;
 let lng;
 // MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
+  console.log(citiesString);
+  
   $.ajax({
-      url: "http://www.mapquestapi.com/geocoding/v1/batch",
+      url: `http://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
       method: 'GET',
       dataType: 'json',
-      data: {
-        key: app.mapApiKey,
-        location: citiesString,
-      }
+      // data: {
+      //   key: app.mapApiKey,
+      //   location: citiesString,
+      // }
     })
     .then(function (response) {
       // got a precise response
@@ -94,6 +100,9 @@ app.getLatLng = (citiesString) => {
       lng = response.results[0].locations[0].displayLatLng.lng;
       // MC JN-12 - 21:20: renamed loc, lat, lng
 
+      //////////////////////////////
+      // MC JN-13 - 16:15: THE RESPONSE IS COMING IN CORRECTLY, BUT IT NEEDS TO BE DECONSTRUCTED
+      //////////////////////////////
 
       // pushes response into an array as objects
       app.latLngArray.push({
