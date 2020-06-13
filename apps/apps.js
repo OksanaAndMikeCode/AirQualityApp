@@ -164,12 +164,17 @@ app.init = function () {
     $('ul').on('click', 'li', app.grabLiText);
 
 
-    /////////////////////////
-    // LEAFLET MAP
-    const map = L.map('map').setView([58, -100], 4);
 
+    $.getJSON("../assets/provGeo.json", function (data) {
+      L.geoJson(data).addTo(map);
+    });
+  
+    /////////////////////////
+    // LEAFLET MAP: INITIALIZATION
+    const map = L.map('map').setView([60, -95], 4);
+  
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     L.marker([55, -100]).addTo(map)
