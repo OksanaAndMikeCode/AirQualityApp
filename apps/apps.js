@@ -85,7 +85,7 @@ app.getLatLng = (citiesString) => {
   console.log(citiesString);
   
   $.ajax({
-      url: `http://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
+      url: `https://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
       method: 'GET',
       dataType: 'json',
       // data: {
@@ -95,9 +95,21 @@ app.getLatLng = (citiesString) => {
     })
     .then(function (response) {
       // got a precise response
-      loc = response.results[0].providedLocation.location;
-      lat = response.results[0].locations[0].displayLatLng.lat;
-      lng = response.results[0].locations[0].displayLatLng.lng;
+      for (i = 0; i < response.results.length; i++) {
+        loc = response.results[i].providedLocation.location;
+        lat = response.results[i].locations[0].displayLatLng.lat;
+        lng = response.results[i].locations[0].displayLatLng.lng;
+        console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
+        app.latLngArray.push({
+          loc,
+          lat,
+          lng
+        });
+      }
+      
+      // loc = response.results[0].providedLocation.location;
+      // lat = response.results[0].locations[0].displayLatLng.lat;
+      // lng = response.results[0].locations[0].displayLatLng.lng;
       // MC JN-12 - 21:20: renamed loc, lat, lng
 
       //////////////////////////////
@@ -105,11 +117,11 @@ app.getLatLng = (citiesString) => {
       //////////////////////////////
 
       // pushes response into an array as objects
-      app.latLngArray.push({
-        loc,
-        lat,
-        lng
-      });
+      // app.latLngArray.push({
+      //   loc,
+      //   lat,
+      //   lng
+      // });
       // MC JN-12 - 21:20: put results into an object, and they are pushed to the array for easier deconstructing
 
       // MC JN-12 - 21:20: started to create a function to push relevant information into a popup
@@ -122,7 +134,6 @@ app.getLatLng = (citiesString) => {
           .bindPopup(app.latLngArray[i].loc)
           .openPopup()
       }
-      console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
     })
     .fail(function () {
       console.log('Lat Lng Response failed');
@@ -248,7 +259,6 @@ app.init = function () {
 
   // OS JN-13 - 11:26: trying to make markers react on click, no results so far
   // $('map').on('click', console.log('hello'));
-  $('L.marker').on("click", console.log('hello'));
 };
 
 //Creating document ready
