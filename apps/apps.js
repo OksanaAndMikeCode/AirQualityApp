@@ -195,8 +195,22 @@ app.init = function () {
 
 
   $.getJSON("../assets/provGeo.json", function (data) {
-    L.geoJson(data).addTo(map);
-  });
+    L.geoJson(data, {
+      onEachFeature: function(feature, featureLayer) {
+        // MC 06-13 09:30: the following uses data stored in the json file to create a popup with province name attached
+        // in this case, PRENAME will be 'Ontario', but we can also use 'O.N.', which we could edit (in the file) to be 'ON'.
+        featureLayer.bindPopup(feature.properties.PRENAME);
+        // console.log(feature, featureLayer, feature.properties.PRENAME);
+        },
+        // MC 06-13 09:30: change color of layer and line weight
+        style: function() {
+          return {
+            color: '#000',
+            weight: 0.5
+          }
+        }
+  }).addTo(map);
+});
 
   /////////////////////////
   // LEAFLET MAP: INITIALIZATION
