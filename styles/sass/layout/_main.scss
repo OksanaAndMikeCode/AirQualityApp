@@ -49,6 +49,14 @@ main {
     grid-column: 1 / -1;
     grid-row: 2 / 4;
 
+    display: none;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    height: 300px;
+    width: 300px;
+    background-color: #aad3e0;
+    z-index: 50;
   }
 }
 
@@ -60,6 +68,4 @@ i {
 footer {
   grid-column: 1 / -1;
   grid-row: 3;
-
-
 }
