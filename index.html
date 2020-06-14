@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Air Quality App</title>
   <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./assets/weatherIcons/css/weather-icons.min.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin="" />
@@ -13,32 +14,56 @@
 </head>
 
 <body>
-  <h2>labels</h2>
-  <label for="province">Choose a province:</label>
-  <select class="province" name="province" id="province" required="">
-    <option value="">Prov</option>
-    <option value="Ontario">ON</option>
-    <option value="British Columbia">BC</option>
-    <option value="Quebec">QC</option>
-    <option value="Nova Scotia">NS</option>
-    <option value="New Brunswick">NB</option>
-    <option value="Alberta">AB</option>
-    <option value="Prince Edward Island">PE</option>
-    <option value="Saskatchewan">SK</option>
-    <option value="Newfoundland">NL</option>
-    <option value="Manitoba">MB</option>
-    <option value="Northwest Territories">NT</option>
-    <option value="Yukon">YT</option>
-    <option value="Nunavut">NU</option>
-  </select>
+  <div class="gridWrap">
+    <header>
+      <label for="province">Choose a province:</label>
+      <select class="province" name="province" id="province" required="">
+        <option value="">Select Province</option>
+        <option value="Ontario">ON</option>
+        <option value="British Columbia">BC</option>
+        <option value="Quebec">QC</option>
+        <option value="Nova Scotia">NS</option>
+        <option value="New Brunswick">NB</option>
+        <option value="Alberta">AB</option>
+        <option value="Prince Edward Island">PE</option>
+        <option value="Saskatchewan">SK</option>
+        <option value="Newfoundland">NL</option>
+        <option value="Manitoba">MB</option>
+        <option value="Northwest Territories">NT</option>
+        <option value="Yukon">YT</option>
+        <option value="Nunavut">NU</option>
+      </select>
+    </header>
 
-  <ul>
+    <main class="relative">
+      <div id="map"></div>
+      <aside class="absolute">
+        <ul>
+        </ul>
+      </aside>
+    </main>
 
-  </ul>
+
+    <footer>
+      <div>
+        <i class="wi wi-day-sunny"></i>
+
+        <h4><a href="https://github.com/OksanaSam" target="_blank" title="Oksana Samokhvalova Github page">Github:
+            Oksana Samokhvalova</a></h4>
+      </div>
+      <div>
+        <h4>Copyright &copy; Oksana Samokhvalova and Michael Currie 2020</h4>
+      </div>
+      <div>
+        <h4><a href="https://github.com/michacurri/" target="_blank" title="Michael Currie Github page">Github: Michael
+            Currie</a></h4>
+      </div>
+    </footer>
+  </div>
 
 
-  <h2>map</h2>
-  <div id="map"></div>
+
+
 
   <script src='https://code.jquery.com/jquery-3.4.0.min.js'
     integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>
@@ -47,7 +72,7 @@
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
-  
+
   <script src='./apps/apps.js'></script>
 
 </body>
