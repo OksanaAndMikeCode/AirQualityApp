@@ -119,11 +119,16 @@ app.getLatLng = (citiesString) => {
           .bindPopup(app.latLngArray[i].loc)
           .openPopup()
       }
+      // $(L.marker).on('click', app.onClick);
+      $(this.marker).on('click', function() {
+        console.log('hello');
+      })
     })
     .fail(function () {
       console.log('Lat Lng Response failed');
     });
 };
+
 
 // app.displayPopup = function(response) {
 //   console.log(response);
@@ -177,9 +182,9 @@ app.getCityData = (city, state) => {
       const appendInfo = `
       <div class="airInfo">
         <h4 class="location">${app.dataObj.city}, ${app.dataObj.province}</h4>
-        <h4 class="temperature">The current temperature is ${app.dataObj.temperature} degrees Celcius.</h4>
-        <h4 class="pollution">The air quality is ${app.dataObj.pollution}.</h4>
-        <h4 class="humidity">The humidity is ${app.dataObj.humidity}.</h4>
+        <h4 class="temperature"><i class="wi wi-thermometer"></i> ${app.dataObj.temperature}<i class="wi wi-celsius"></i></h4>
+        <h4 class="pollution">Air quality ${app.dataObj.pollution}</h4>
+        <h4 class="humidity"><i class="wi wi-humidity"></i> ${app.dataObj.humidity}</h4>
       </div>`;
       $('aside').show().append(appendInfo);
     })
@@ -254,6 +259,22 @@ app.leafletMap = () => {
       //   }
     }).addTo(map);
 
+
+    L.marker.on('click', function() {
+      console.log(this);
+      // provClicked = feature.properties.PRENAME;
+      // app.grabInput(provClicked);
+      // console.log(provClicked);
+    })
+
+    // $(L.marker).on('click', app.onClick);
+
+    // app.onClick = () => {
+      // let popup = L.marker.getPopup();
+      // let content = popup.getContent();
+      // let content = this.getPopup().getContent();
+      // console.log(this);
+    // }
     // L.marker([55, -100]).addTo(map)
     //   .bindPopup('Canada.<br> Air Quality App.')
     //   .openPopup();
@@ -284,8 +305,49 @@ app.leafletMap = () => {
 }
 
 
+// ------------New Feature--------- //
+// a function to get browser geolocaion 
+app.getCurrentLocation = function() {
+  navigator.geolocation.getCurrentPosition(function(location) {
+      let currentLat;
+      let currentLng;
+      currentLat = location.coords.latitude;
+      currentLng = location.coords.longitude;
+      app.getCurrentAirData(currentLat, currentLng);
+  });
+};
 
-
+// making a call to the Visual Air Api to get data on the current location
+app.getCurrentAirData = (latitude, longitude) => {
+  $.ajax({
+      url: `https://api.airvisual.com/v2/nearest_city`,
+      method: 'GET',
+      dataType: 'json',
+      data: {
+        lat: latitude,
+        lon: longitude,
+        key: app.airApiKey,
+      }
+    }).then(function (response) {
+      const appendInfo = `
+      <div class="airInfo">
+        <h4 class="location">${response.data.city}, ${response.data.state}</h4>
+        <h4 class="temperature"><i class="wi wi-thermometer"></i> ${response.data.current.weather.tp}<i class="wi wi-celsius"></i></h4>
+        <h4 class="pollution">Air quality: ${response.data.current.pollution.aqius}</h4>
+        <h4 class="humidity"><i class="wi wi-humidity"></i> ${response.data.current.weather.hu}</h4>
+      </div>`;
+      $('aside').show().append(appendInfo);
+      console.log(response.data.city, response.data.state, response.data.current.weather, response.data.current.pollution);
+      // creating a popup for current location
+      L.marker([response.data.location.coordinates[1], response.data.location.coordinates[0]]).addTo(map)
+      .bindPopup(response.data.city, response.data.state)
+      .openPopup()
+    })
+    .fail(function () {
+      alert('Sorry, unable to retrieve your location!');
+    });
+};
+// ------------End of New Feature--------- //
 
 
 //Creating an init function
@@ -294,7 +356,10 @@ app.init = function () {
   $(".province").change(app.getProvinceAbbrev);
   $(".province").change(app.grabInput);
   $('ul').on('click', 'li', app.grabLiText);
-
+ // getting current location data on geo image click - NEW FEATURE
+  $('#geoImage').on('click', function() {
+    app.getCurrentLocation();
+  });
 };
 
 //Creating document ready
