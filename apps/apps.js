@@ -187,10 +187,29 @@ app.getCityData = (city, state) => {
       };
       console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
       console.log(app.dataObj);
+
+      // variable to store info that will be appended on click
+      const appendInfo = `
+      <div class="airInfo">
+        <h4 class="location">${app.dataObj.city}, ${app.dataObj.province}</h4>
+        <h4 class="temperature">The current temperature is ${app.dataObj.temperature} degrees Celcius.</h4>
+        <h4 class="pollution">The air quality is ${app.dataObj.pollution}.</h4>
+        <h4 class="humidity">The humidity is ${app.dataObj.humidity}.</h4>
+      </div>`;
+      $('aside').show().append(appendInfo);
     })
     .fail(function () {
       alert('Sorry, your city cannot be found');
     });
+};
+
+
+// creating a function to pass the clicked marker to Air Visual API
+app.grabMarker = function () {
+  let chosenMarker = L.marker.getContent();
+  // let chosenMarker = $(this).getContent();
+  console.log(chosenMarker);
+  app.getCityData(chosenMarker, selectedProvince);
 };
 
 let selectedProvince;
