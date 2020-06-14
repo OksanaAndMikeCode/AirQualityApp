@@ -1,3 +1,4 @@
 .vscode/
+.DS_Store
 # sass
 # left SASS alone until we are ready to submit final
