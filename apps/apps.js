@@ -76,7 +76,15 @@ app.getCitiesArray = (state) => {
 
       })
       .fail(function () {
-        alert('Sorry, cities cannot be found');
+        swal({
+          title: 'Sorry, cities cannot be found',
+          // text: 'Some text.',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',
+          confirmButtonText: "Ok",
+          // cancelButtonText: 'No.'
+        })
       });
   });
 }
@@ -143,7 +151,6 @@ let abbreviation;
 // creating a function to get the chosen province name abbreviation
 app.getProvinceAbbrev = function () {
   abbreviation = $('.province').children("option:selected").text();
-  return abbreviation;
 }
 
 // creating a function to pass the clicked city to the API for Air Quality
@@ -192,7 +199,15 @@ app.getCityData = (city, state) => {
       $('aside').show().html(appendInfo);
     })
     .fail(function () {
-      alert('Sorry, your city cannot be found');
+      swal({
+        title: 'Sorry, your city cannot be found',
+        // text: 'Some text.',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: "Ok",
+        // cancelButtonText: 'No.'
+      })
     });
 };
 
@@ -346,7 +361,15 @@ app.getCurrentAirData = (latitude, longitude) => {
       console.log(response.data.city, response.data.state, response.data.current.weather, response.data.current.pollution);
     })
     .fail(function () {
-      alert('Sorry, unable to retrieve your location!');
+      swal({
+        title: 'Sorry, unable to retrieve your location',
+        // text: 'Some text.',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: "Ok",
+        // cancelButtonText: 'No.'
+      })
     });
 };
 // ------------End of New Feature--------- //
