@@ -34,7 +34,7 @@ app.getCitiesArray = (state) => {
     const citiesArray = [];
     response.data.forEach((arrayItem) => {
       citiesArray.push(arrayItem.city);
-      $('ul').append(`<li><span class="fa fa-square-o"></span>${arrayItem.city}</li>`);
+      $('ul').html(`<li>${arrayItem.city}</li>`);
       console.log(arrayItem.city);
     });
     // console.log(citiesArray);
@@ -120,9 +120,12 @@ app.getLatLng = (citiesString) => {
           .openPopup()
       }
       // $(L.marker).on('click', app.onClick);
-      $(this.marker).on('click', function() {
-        console.log('hello');
-      })
+      // $(L.marker).on('click', function() {
+      //   // console.log(L.marker);
+      //   let popup = marker.getPopup();
+      //   let content = popup.getContent();
+      //   console.log(content);
+      // })
     })
     .fail(function () {
       console.log('Lat Lng Response failed');
@@ -186,7 +189,7 @@ app.getCityData = (city, state) => {
         <h4 class="pollution">Air quality ${app.dataObj.pollution}</h4>
         <h4 class="humidity"><i class="wi wi-humidity"></i> ${app.dataObj.humidity}</h4>
       </div>`;
-      $('aside').show().append(appendInfo);
+      $('aside').show().html(appendInfo);
     })
     .fail(function () {
       alert('Sorry, your city cannot be found');
@@ -208,7 +211,6 @@ app.grabInput = () => {
   alert("You have selected the province - " + selectedProvince);
   console.log(selectedProvince);
   app.getCitiesArray(selectedProvince);
-  // app.getCityData('Toronto', selectedProvince);
 };
 
 
@@ -233,11 +235,11 @@ app.leafletMap = () => {
         // MC JN-13 20:15: the onClick event listener
         featureLayer.on('click', function() {
           provClicked = feature.properties.PRENAME;
+          abbreviation = feature.properties.PREABBR;
           // app.grabInput(provClicked);
-          console.log(provClicked);
-          
-          
-          
+          console.log(provClicked, abbreviation);
+        // OS JN-14 20:47: making API call using the clicked province
+          app.getCitiesArray(provClicked);
       } );
         // MC 06-13 09:30: the following uses data stored in the json file to create a popup with province name attached
         // in this case, PRENAME will be 'Ontario', but we can also use 'O.N.', which we could edit (in the file) to be 'ON'.
@@ -313,6 +315,10 @@ app.getCurrentLocation = function() {
       let currentLng;
       currentLat = location.coords.latitude;
       currentLng = location.coords.longitude;
+       // creating a popup for current location
+       L.marker([currentLat, currentLng]).addTo(map)
+       .bindPopup('You are here!')
+       .openPopup()
       app.getCurrentAirData(currentLat, currentLng);
   });
 };
@@ -331,17 +337,13 @@ app.getCurrentAirData = (latitude, longitude) => {
     }).then(function (response) {
       const appendInfo = `
       <div class="airInfo">
-        <h4 class="location">${response.data.city}, ${response.data.state}</h4>
+        <h4 class="location">Your Place</h4>
         <h4 class="temperature"><i class="wi wi-thermometer"></i> ${response.data.current.weather.tp}<i class="wi wi-celsius"></i></h4>
         <h4 class="pollution">Air quality: ${response.data.current.pollution.aqius}</h4>
         <h4 class="humidity"><i class="wi wi-humidity"></i> ${response.data.current.weather.hu}</h4>
       </div>`;
-      $('aside').show().append(appendInfo);
+      $('aside').show().html(appendInfo);
       console.log(response.data.city, response.data.state, response.data.current.weather, response.data.current.pollution);
-      // creating a popup for current location
-      L.marker([response.data.location.coordinates[1], response.data.location.coordinates[0]]).addTo(map)
-      .bindPopup(response.data.city, response.data.state)
-      .openPopup()
     })
     .fail(function () {
       alert('Sorry, unable to retrieve your location!');
