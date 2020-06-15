@@ -371,10 +371,6 @@ header #geoImage {
   grid-row: 1;
 }
 
-header label {
-  visibility: hidden;
-}
-
 header #province {
   text-align: center;
   -ms-grid-column: 2;
@@ -398,27 +394,34 @@ main {
   grid-row-gap: 0px;
 }
 
+main #map {
+  z-index: 0;
+}
+
 main aside {
-  bottom: 0;
-  left: 0;
-  right: 0;
+  right: 50px;
+  top: 50px;
   grid-column: 1 / -1;
   -ms-grid-row: 2;
   -ms-grid-row-span: 2;
   grid-row: 2 / 4;
   display: none;
   position: absolute;
-  right: 50px;
-  top: 50px;
-  height: 300px;
-  width: 300px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 400px;
   background-color: #aad3e0;
+  padding: right;
   z-index: 50;
+  padding-left: 10px;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(37, 126, 202, 0.5);
+          box-shadow: 10px 10px 5px 0px rgba(37, 126, 202, 0.5);
 }
 
 i {
   font-size: 32px;
-  color: black;
+  color: #000;
 }
 
 img {
