@@ -341,21 +341,20 @@ h1 {
 }
 
 header {
+  height: 10vh;
   grid-column: 1 / -1;
   -ms-grid-row: 1;
   grid-row: 1;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr;
-      grid-template-columns: 1fr;
-  -ms-grid-rows: 1fr;
-      grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
 }
 
-header label,
-header #province {
+header #logo {
+  -ms-grid-column-align: center;
+      justify-self: center;
   text-align: center;
   -ms-grid-column: 1;
   grid-column: 1;
@@ -363,7 +362,29 @@ header #province {
   grid-row: 1;
 }
 
+header #geoImage {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  -ms-grid-column: 3;
+  grid-column: 3;
+  -ms-grid-row: 1;
+  grid-row: 1;
+}
+
+header label {
+  visibility: hidden;
+}
+
+header #province {
+  text-align: center;
+  -ms-grid-column: 2;
+  grid-column: 2;
+  -ms-grid-row: 1;
+  grid-row: 1;
+}
+
 main {
+  height: 85vh;
   grid-column: 1 / -1;
   -ms-grid-row: 2;
   grid-row: 2;
@@ -375,11 +396,6 @@ main {
       grid-template-rows: 4fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-}
-
-main #map {
-  width: 100%;
-  height: 100%;
 }
 
 main aside {
@@ -410,6 +426,7 @@ img {
 }
 
 footer {
+  height: 5vh;
   grid-column: 1 / -1;
   -ms-grid-row: 3;
   grid-row: 3;

@@ -242,7 +242,10 @@ app.leafletMap = () => {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  $.getJSON("../assets/provGeo.json", function (data) {
+  const getGeoJson = "../assets/provGeo.json"
+  // const getGeoJson = "https://thisdude.codes/pages/airQualityApp/assets/provGeo.json";
+
+  $.getJSON(getGeoJson, function (data) {
     L.geoJson(data, {
       // MC JN-13 20:15: featureLayer contains the data we want to use for onClick; see provClicked
       onEachFeature: function (feature, featureLayer) {
