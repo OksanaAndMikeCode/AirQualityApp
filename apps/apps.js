@@ -20,13 +20,21 @@ app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get the cities array
 app.getCitiesArray = (state) => {
   $.ajax({
-    url: `https://api.airvisual.com/v2/cities`,
-    method: 'GET',
+    url: 'https://proxy.hackeryou.com',
+    method:'GET',
     dataType: 'json',
     data: {
-      state: state,
-      country: 'Canada',
-      key: app.airApiKey,
+      reqUrl: `https://api.airvisual.com/v2/cities`,
+      params: {
+        state: state,
+        country: 'Canada',
+        key: app.airApiKey,
+      },
+      proxyHeaders: {
+        'Some-Header': 'goes here'
+      },
+      xmlToJSON: false,
+      useCache: false
     }
   }).then(function (response) {
     // console.log('Yay, I got a response', response.data[0]);
@@ -95,17 +103,20 @@ let lng;
 // MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
   console.log(citiesString);
-
-  $.ajax({
       // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
-      url: `https://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
-      method: 'GET',
-      dataType: 'json',
-      // data: {
-      //   key: app.mapApiKey,
-      //   location: citiesString,
-      // }
-    })
+  $.ajax({
+    url: 'https://proxy.hackeryou.com',
+    method:'GET',
+    dataType: 'json',
+    data: {
+      reqUrl: `https://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
+      proxyHeaders: {
+        'Some-Header': 'goes here'
+      },
+      xmlToJSON: false,
+      useCache: false
+    }
+  })
     .then(function (response) {
       // got a precise response
       for (i = 0; i < response.results.length; i++) {
@@ -163,16 +174,24 @@ app.grabLiText = function () {
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
 app.getCityData = (city, state) => {
   $.ajax({
-      url: `https://api.airvisual.com/v2/city`,
-      method: 'GET',
-      dataType: 'json',
-      data: {
+    url: 'https://proxy.hackeryou.com',
+    method:'GET',
+    dataType: 'json',
+    data: {
+      reqUrl: `https://api.airvisual.com/v2/city`,
+      params: {
         city: city,
         state: state,
         country: 'Canada',
         key: app.airApiKey,
-      }
-    }).then(function (response) {
+      },
+      proxyHeaders: {
+        'Some-Header': 'goes here'
+      },
+      xmlToJSON: false,
+      useCache: false
+    }
+  }).then(function (response) {
       app.dataObj = {
         city: city,
         province: state,
@@ -341,13 +360,21 @@ app.getCurrentLocation = function() {
 // making a call to the Visual Air Api to get data on the current location
 app.getCurrentAirData = (latitude, longitude) => {
   $.ajax({
-      url: `https://api.airvisual.com/v2/nearest_city`,
-      method: 'GET',
+      url: 'https://proxy.hackeryou.com',
+      method:'GET',
       dataType: 'json',
       data: {
-        lat: latitude,
-        lon: longitude,
-        key: app.airApiKey,
+        reqUrl: `https://api.airvisual.com/v2/nearest_city`,
+        params: {
+          lat: latitude,
+          lon: longitude,
+          key: app.airApiKey,
+        },
+        proxyHeaders: {
+          'Some-Header': 'goes here'
+        },
+        xmlToJSON: false,
+        useCache: false
       }
     }).then(function (response) {
       const appendInfo = `
