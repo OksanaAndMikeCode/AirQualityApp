@@ -21,7 +21,7 @@ app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
 app.getCitiesArray = (state) => {
   $.ajax({
     url: 'https://proxy.hackeryou.com',
-    method:'GET',
+    method: 'GET',
     dataType: 'json',
     data: {
       reqUrl: `https://api.airvisual.com/v2/cities`,
@@ -103,20 +103,20 @@ let lng;
 // MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
   console.log(citiesString);
-      // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
+  // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
   $.ajax({
-    url: 'https://proxy.hackeryou.com',
-    method:'GET',
-    dataType: 'json',
-    data: {
-      reqUrl: `https://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
-      proxyHeaders: {
-        'Some-Header': 'goes here'
-      },
-      xmlToJSON: false,
-      useCache: false
-    }
-  })
+      url: 'https://proxy.hackeryou.com',
+      method: 'GET',
+      dataType: 'json',
+      data: {
+        reqUrl: `https://www.mapquestapi.com/geocoding/v1/batch?key=${app.mapApiKey}&location=${citiesString}`,
+        proxyHeaders: {
+          'Some-Header': 'goes here'
+        },
+        xmlToJSON: false,
+        useCache: false
+      }
+    })
     .then(function (response) {
       // got a precise response
       for (i = 0; i < response.results.length; i++) {
@@ -134,10 +134,18 @@ app.getLatLng = (citiesString) => {
       // OS JN-13 - 11:17: adding popups of cities in the selected province using the lat lng data received from mapquest  
       for (let i = 0; i < app.latLngArray.length; i++) {
         // console.log(i);
-        L.marker([app.latLngArray[i].lat, app.latLngArray[i].lng]).addTo(map)
+        L.marker([app.latLngArray[i].lat, app.latLngArray[i].lng])
           .bindPopup(app.latLngArray[i].loc)
           .openPopup()
+          .addTo(map)
+          // .on('click', function() { console.log(app.latLngArray[i].loc); })
+          .on('click', function () {
+            const clickedCity = app.latLngArray[i].loc
+          // either need to process the result and remove ABBREVIATION, or create a new function to automatically do that.
+            app.grabMarker(clickedCity);
+          })
       }
+
       // $(L.marker).on('click', app.onClick);
       // $(L.marker).on('click', function() {
       //   // console.log(L.marker);
@@ -174,24 +182,24 @@ app.grabLiText = function () {
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
 app.getCityData = (city, state) => {
   $.ajax({
-    url: 'https://proxy.hackeryou.com',
-    method:'GET',
-    dataType: 'json',
-    data: {
-      reqUrl: `https://api.airvisual.com/v2/city`,
-      params: {
-        city: city,
-        state: state,
-        country: 'Canada',
-        key: app.airApiKey,
-      },
-      proxyHeaders: {
-        'Some-Header': 'goes here'
-      },
-      xmlToJSON: false,
-      useCache: false
-    }
-  }).then(function (response) {
+      url: 'https://proxy.hackeryou.com',
+      method: 'GET',
+      dataType: 'json',
+      data: {
+        reqUrl: `https://api.airvisual.com/v2/city`,
+        params: {
+          city: city,
+          state: state,
+          country: 'Canada',
+          key: app.airApiKey,
+        },
+        proxyHeaders: {
+          'Some-Header': 'goes here'
+        },
+        xmlToJSON: false,
+        useCache: false
+      }
+    }).then(function (response) {
       app.dataObj = {
         city: city,
         province: state,
@@ -231,12 +239,17 @@ app.getCityData = (city, state) => {
 };
 
 
+
+
+
 // creating a function to pass the clicked marker to Air Visual API
-app.grabMarker = function () {
-  let chosenMarker = L.marker.getContent();
+app.grabMarker = function (marker) {
+  // let chosenMarker = L.marker.getContent();
   // let chosenMarker = $(this).getContent();
-  console.log(chosenMarker);
-  app.getCityData(chosenMarker, selectedProvince);
+  // console.log(chosenMarker);
+  console.log(marker);
+  
+  app.getCityData(marker, selectedProvince);
 };
 
 let selectedProvince;
@@ -253,7 +266,7 @@ app.grabInput = () => {
 
 app.leafletMap = () => {
 
-    /////////////////////////
+  /////////////////////////
   // LEAFLET MAP: INITIALIZATION
   map = L.map('map').setView([60, -95], 4);
 
@@ -265,79 +278,33 @@ app.leafletMap = () => {
   // const getGeoJson = "https://thisdude.codes/pages/airQualityApp/assets/provGeo.json";
 
   $.getJSON(getGeoJson, function (data) {
+
     L.geoJson(data, {
       // MC JN-13 20:15: featureLayer contains the data we want to use for onClick; see provClicked
       onEachFeature: function (feature, featureLayer) {
-
         // MC JN-13 20:15: the onClick event listener
-        featureLayer.on('click', function() {
+        featureLayer.on('click', function () {
           provClicked = feature.properties.PRENAME;
           abbreviation = feature.properties.PREABBR;
           // app.grabInput(provClicked);
           console.log(provClicked, abbreviation);
-        // OS JN-14 20:47: making API call using the clicked province
+          // OS JN-14 20:47: making API call using the clicked province
           app.getCitiesArray(provClicked);
-      } );
+        })
         // MC 06-13 09:30: the following uses data stored in the json file to create a popup with province name attached
         // in this case, PRENAME will be 'Ontario', but we can also use 'O.N.', which we could edit (in the file) to be 'ON'.
         featureLayer.bindPopup(feature.properties.PRENAME);
         // console.log(feature, featureLayer, feature.properties.PRENAME);
       },
       // MC 06-13 09:30: change color of layer and line weight
-      style: function () {
+      // STYLE IS NOT APPENDING
+      style: function (feature, featureLayer) {
         return {
-          color: '#000',
+          color: '#333',
           weight: 0.5
         }
-      },
-      
-      // }).bindPopup(function (feature) {
-      //   if (feature) {
-      //     // console.log(layer.feature.type);
-
-      //   }
+      }
     }).addTo(map);
-
-
-    L.marker.on('click', function() {
-      console.log(this);
-      // provClicked = feature.properties.PRENAME;
-      // app.grabInput(provClicked);
-      // console.log(provClicked);
-    })
-
-    // $(L.marker).on('click', app.onClick);
-
-    // app.onClick = () => {
-      // let popup = L.marker.getPopup();
-      // let content = popup.getContent();
-      // let content = this.getPopup().getContent();
-      // console.log(this);
-    // }
-    // L.marker([55, -100]).addTo(map)
-    //   .bindPopup('Canada.<br> Air Quality App.')
-    //   .openPopup();
-
-    // L.marker([43.651893, -79.381713]).addTo(map)
-    //   .bindPopup('Toronto')
-    //   .openPopup();
-
-    // L.marker([45.420421, -75.692432]).addTo(map)
-    //   .bindPopup('Ottawa')
-    //   .openPopup();
-
-    // L.marker([49.900496, -97.139309]).addTo(map)
-    //   .bindPopup('Winnipeg')
-    //   .openPopup();
-    /////////////////////////
-
-    // OS JN-13 - 11:26: trying to make markers react on click, no results so far
-    // $('map').on('click', console.log('hello'));
-
-
-    // map.eachLayer(function (layer) {
-    //   layer.onEachFeature();
-    // });
   });
 
 
@@ -346,17 +313,17 @@ app.leafletMap = () => {
 
 // ------------New Feature--------- //
 // a function to get browser geolocaion 
-app.getCurrentLocation = function() {
-  navigator.geolocation.getCurrentPosition(function(location) {
-      let currentLat;
-      let currentLng;
-      currentLat = location.coords.latitude;
-      currentLng = location.coords.longitude;
-       // creating a popup for current location
-       L.marker([currentLat, currentLng]).addTo(map)
-       .bindPopup('You are here!')
-       .openPopup()
-      app.getCurrentAirData(currentLat, currentLng);
+app.getCurrentLocation = function () {
+  navigator.geolocation.getCurrentPosition(function (location) {
+    let currentLat;
+    let currentLng;
+    currentLat = location.coords.latitude;
+    currentLng = location.coords.longitude;
+    // creating a popup for current location
+    L.marker([currentLat, currentLng]).addTo(map)
+      .bindPopup('You are here!')
+      .openPopup()
+    app.getCurrentAirData(currentLat, currentLng);
   });
 };
 
@@ -364,7 +331,7 @@ app.getCurrentLocation = function() {
 app.getCurrentAirData = (latitude, longitude) => {
   $.ajax({
       url: 'https://proxy.hackeryou.com',
-      method:'GET',
+      method: 'GET',
       dataType: 'json',
       data: {
         reqUrl: `https://api.airvisual.com/v2/nearest_city`,
@@ -411,9 +378,10 @@ app.init = function () {
   $(".province").change(app.getProvinceAbbrev);
   $(".province").change(app.grabInput);
   $('ul').on('click', 'li', app.grabLiText);
- // getting current location data on geo image click - NEW FEATURE
-  $('#geoImage').on('click', function() {
+  // getting current location data on geo image click - NEW FEATURE
+  $('#geoImage').on('click', function () {
     app.getCurrentLocation();
+    //amazing
   });
 };
 
