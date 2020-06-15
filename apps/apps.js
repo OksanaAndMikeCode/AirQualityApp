@@ -120,8 +120,10 @@ app.getLatLng = (citiesString) => {
     })
     .then(function (response) {
       // got a precise response
+      console.log(response.results[0].locations[0].adminArea5);
       for (i = 0; i < response.results.length; i++) {
-        loc = response.results[i].providedLocation.location;
+        // loc = response.results[i].providedLocation.location;
+        loc = response.results[i].locations[0].adminArea5;
         lat = response.results[i].locations[0].displayLatLng.lat;
         lng = response.results[i].locations[0].displayLatLng.lng;
         console.log(`${loc}: Latitude is ${lat}, longitude is ${lng}`);
@@ -277,7 +279,7 @@ app.grabMarker = function (marker) {
   // console.log(chosenMarker);
   console.log(marker);
   
-  app.getCityData(marker, selectedProvince);
+  app.getCityData(marker, provClicked);
 };
 
 let selectedProvince;
