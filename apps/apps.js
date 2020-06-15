@@ -14,6 +14,7 @@ app.latLngArray = [];
 //Storing api key in a variable
 app.airApiKey = '69bdebb7-8ed2-400a-bcd2-24b56bacb155';
 app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
+app.unsplashApiKey = 'Ro76YKYpmutB58ImuEKT8izDBYKA669WYcjJWz-U6TA';
 
 // Consumer Secret: JuWwJGHxstRmxJUj
 
@@ -179,6 +180,26 @@ app.grabLiText = function () {
   app.getCityData(chosenCity, selectedProvince);
 };
 
+// declaring the variables for Unsplash results
+let unsplashUrl;
+let altTag;
+// creating a function to get a random image from Unsplash API
+app.getImages = (photoLocation) => {
+  $.ajax({
+      url: 'https://api.unsplash.com/photos/random',
+      method: 'GET',
+      dataType: 'json',
+      data: {
+          client_id: app.unsplashApiKey,
+          query: `${photoLocation} street`,
+          orientation: 'landscape',
+      },
+  }).then(function (response) {
+      unsplashUrl = response.urls.regular;
+      altTag = response.alt_description;
+  })
+}
+
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
 app.getCityData = (city, state) => {
   $.ajax({
@@ -215,14 +236,21 @@ app.getCityData = (city, state) => {
       console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
       console.log(app.dataObj);
 
+      // calling the function to get images from unsplash API 
+      app.getImages(app.dataObj.city);
+
       // variable to store info that will be appended on click
       const appendInfo = `
       <div class="airInfo">
-        <h4 class="location">${app.dataObj.city}, ${app.dataObj.province}</h4>
-        <h4 class="temperature"><i class="wi wi-thermometer"></i> ${app.dataObj.temperature}<i class="wi wi-celsius"></i></h4>
-        <h4 class="pollution">Air quality ${app.dataObj.pollution}</h4>
-        <h4 class="humidity"><i class="wi wi-humidity"></i> ${app.dataObj.humidity}</h4>
+        <h3 class="location">${app.dataObj.city}, ${app.dataObj.province}</h3>
+        <img class="weatherIcon" src="./assets/${response.data.current.weather.ic}.svg" alt="Weather icon">
+        <h4 class="pollution">AirQI ${response.data.current.pollution.aqius}</h4>
+        <h4 class="temperature"><i class="wi wi-thermometer"></i> ${response.data.current.weather.tp}<i class="wi wi-celsius"></i></h4>
+        <h4 class="humidity"><i class="wi wi-humidity"></i> ${response.data.current.weather.hu}</h4>
+        <h4 class="wind"><i class="wi wi-wind-direction"></i> ${response.data.current.weather.ws} m/s</h4>
+        <img class="unsplashImg" src="${unsplashUrl}" alt="${altTag}">
       </div>`;
+      // making aside visible to the user
       $('aside').show().html(appendInfo);
     })
     .fail(function () {
@@ -290,7 +318,10 @@ app.leafletMap = () => {
           console.log(provClicked, abbreviation);
           // OS JN-14 20:47: making API call using the clicked province
           app.getCitiesArray(provClicked);
-        })
+          // hiding aside once the user clicks on the province
+          $('aside').hide();
+
+      } );
         // MC 06-13 09:30: the following uses data stored in the json file to create a popup with province name attached
         // in this case, PRENAME will be 'Ontario', but we can also use 'O.N.', which we could edit (in the file) to be 'ON'.
         featureLayer.bindPopup(feature.properties.PRENAME);
@@ -313,17 +344,18 @@ app.leafletMap = () => {
 
 // ------------New Feature--------- //
 // a function to get browser geolocaion 
-app.getCurrentLocation = function () {
-  navigator.geolocation.getCurrentPosition(function (location) {
-    let currentLat;
-    let currentLng;
-    currentLat = location.coords.latitude;
-    currentLng = location.coords.longitude;
-    // creating a popup for current location
-    L.marker([currentLat, currentLng]).addTo(map)
-      .bindPopup('You are here!')
-      .openPopup()
-    app.getCurrentAirData(currentLat, currentLng);
+app.getCurrentLocation = function() {
+  $('aside').hide();
+  navigator.geolocation.getCurrentPosition(function(location) {
+      let currentLat;
+      let currentLng;
+      currentLat = location.coords.latitude;
+      currentLng = location.coords.longitude;
+       // creating a popup for current location
+       L.marker([currentLat, currentLng]).addTo(map)
+       .bindPopup('You are here!')
+       .openPopup()
+      app.getCurrentAirData(currentLat, currentLng);
   });
 };
 
@@ -349,10 +381,13 @@ app.getCurrentAirData = (latitude, longitude) => {
     }).then(function (response) {
       const appendInfo = `
       <div class="airInfo">
-        <h4 class="location">Your Place</h4>
+        <h3 class="location">Your Place</h3>
+        <img class="weatherIcon" src="./assets/${response.data.current.weather.ic}.svg" alt="Weather icon">
+        <h4 class="pollution">AirQI ${response.data.current.pollution.aqius}</h4>
         <h4 class="temperature"><i class="wi wi-thermometer"></i> ${response.data.current.weather.tp}<i class="wi wi-celsius"></i></h4>
-        <h4 class="pollution">Air quality: ${response.data.current.pollution.aqius}</h4>
         <h4 class="humidity"><i class="wi wi-humidity"></i> ${response.data.current.weather.hu}</h4>
+        
+        <h4 class="wind"><i class="wi wi-wind-direction"></i> ${response.data.current.weather.ws} m/s</h4>
       </div>`;
       $('aside').show().html(appendInfo);
       console.log(response.data.city, response.data.state, response.data.current.weather, response.data.current.pollution);
@@ -378,11 +413,8 @@ app.init = function () {
   $(".province").change(app.getProvinceAbbrev);
   $(".province").change(app.grabInput);
   $('ul').on('click', 'li', app.grabLiText);
-  // getting current location data on geo image click - NEW FEATURE
-  $('#geoImage').on('click', function () {
-    app.getCurrentLocation();
-    //amazing
-  });
+ // getting current location data on geo image click - NEW FEATURE
+  $('#geoImage').on('click', app.getCurrentLocation);
 };
 
 //Creating document ready
