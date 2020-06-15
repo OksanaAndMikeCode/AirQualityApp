@@ -20,7 +20,7 @@ app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get the cities array
 app.getCitiesArray = (state) => {
   $.ajax({
-    url: 'http://proxy.hackeryou.com',
+    url: 'https://proxy.hackeryou.com',
     method:'GET',
     dataType: 'json',
     data: {
@@ -105,7 +105,7 @@ app.getLatLng = (citiesString) => {
   console.log(citiesString);
       // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
   $.ajax({
-    url: 'http://proxy.hackeryou.com',
+    url: 'https://proxy.hackeryou.com',
     method:'GET',
     dataType: 'json',
     data: {
@@ -174,7 +174,7 @@ app.grabLiText = function () {
 //Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
 app.getCityData = (city, state) => {
   $.ajax({
-    url: 'http://proxy.hackeryou.com',
+    url: 'https://proxy.hackeryou.com',
     method:'GET',
     dataType: 'json',
     data: {
@@ -360,7 +360,7 @@ app.getCurrentLocation = function() {
 // making a call to the Visual Air Api to get data on the current location
 app.getCurrentAirData = (latitude, longitude) => {
   $.ajax({
-      url: 'http://proxy.hackeryou.com',
+      url: 'https://proxy.hackeryou.com',
       method:'GET',
       dataType: 'json',
       data: {
