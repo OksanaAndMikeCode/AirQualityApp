@@ -278,6 +278,7 @@ app.leafletMap = () => {
   L.marker([44.6820, -63.7443]).addTo(app.map).bindPopup('Nova Scotia').openPopup();
   L.marker([46.5653, -66.4619]).addTo(app.map).bindPopup('New Brunswick').openPopup();
   L.marker([53.7267, -127.6476]).addTo(app.map).bindPopup('British Columbia').openPopup();
+  
 }
 
 // Getting browser geolocaion 
@@ -339,6 +340,9 @@ app.getCurrentAirData = (latitude, longitude) => {
 app.init = function () {
   app.leafletMap();
   $('#geoImage').on('click', app.getCurrentLocation);
+  $('#closeButton').on('click', () => {
+    $('aside').hide();
+  });
 };
 
 // Document ready

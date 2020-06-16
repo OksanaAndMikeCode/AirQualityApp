@@ -67,7 +67,7 @@ header {
     grid-row: 1;
     &:hover,
     &:focus {
-      background-color: $primaryColour;
+      transform: scale(1.2);
     }
   }
 }
