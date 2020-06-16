@@ -239,6 +239,18 @@ html {
   font-size: 62.5%;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+a,
+i {
+  margin: 0;
+  padding: 0;
+}
+
 .innerWrapper {
   max-width: 1000px;
   height: 100%;
@@ -484,7 +496,7 @@ main #map {
   z-index: 0;
 }
 
-main aside {
+aside {
   grid-column: 1 / -1;
   -ms-grid-row: 2;
   grid-row: 2;
@@ -492,6 +504,7 @@ main aside {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  max-height: 60vh;
   background-color: #257eca;
   padding: right;
   z-index: 50;
@@ -500,8 +513,72 @@ main aside {
           box-shadow: 10px 10px 5px 0px rgba(37, 126, 202, 0.5);
 }
 
-main aside img {
-  width: 50px;
+aside .airInfo {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 3fr;
+      grid-template-columns: 3fr;
+  -ms-grid-rows: 6fr;
+      grid-template-rows: 6fr;
+  grid-column-gap: 1vw;
+  grid-row-gap: 1vw;
+  min-width: 0;
+  min-height: 0;
+}
+
+aside .airInfo .location {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  text-align: center;
+}
+
+aside .airInfo .pollution {
+  -ms-grid-column: 1;
+  grid-column: 1;
+  -ms-grid-row: 2;
+  grid-row: 2;
+}
+
+aside .airInfo .temperature {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  -ms-grid-row: 3;
+  grid-row: 3;
+}
+
+aside .airInfo .humidity {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  -ms-grid-row: 4;
+  grid-row: 4;
+}
+
+aside .airInfo .wind {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  -ms-grid-row: 5;
+  grid-row: 5;
+}
+
+aside .airInfo .weatherIcon {
+  width: 11vw;
+  -ms-grid-column: 2;
+  grid-column: 2;
+  -ms-grid-row: 1;
+  grid-row: 1;
+}
+
+aside .airInfo img {
+  grid-column: 2 / -1;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 3;
+  grid-row: 2 / 5;
+  width: 30vw;
+  min-width: 0;
 }
 
 footer {
@@ -524,5 +601,5 @@ footer {
 }
 
 footer h5 {
-  margin: 4vw;
+  margin: 0 4vw;
 }
