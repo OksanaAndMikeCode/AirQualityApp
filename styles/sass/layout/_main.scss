@@ -65,6 +65,10 @@ header {
     justify-self: center;
     grid-column: 3;
     grid-row: 1;
+    &:hover,
+    &:focus {
+      background-color: $primaryColour;
+    }
   }
 }
 

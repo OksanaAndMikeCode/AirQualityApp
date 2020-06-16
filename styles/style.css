@@ -459,6 +459,10 @@ header #geoImage {
   grid-row: 1;
 }
 
+header #geoImage:hover, header #geoImage:focus {
+  background-color: #aad3e0;
+}
+
 main {
   height: 80vh;
   grid-column: 1 / -1;
