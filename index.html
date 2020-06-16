@@ -19,37 +19,33 @@
 <body>
   <div class="gridWrap">
     <header>
-      <img class="logo" id="logo" src="./assets/noun_Canada_241730.png" alt="Map marker with the Canadien flag">
-      <h1>AirClear Canada</h1>
-      <img class="geoImage" id="geoImage" src="./assets/noun_Geolocation_3098010_edited.svg" alt="Geolocaion icon">
+      <div class="logoHeader flex">
+        <img class="logo" id="logo" src="./assets/noun_Canada_241730.png" alt="Map marker with the Canadien flag">
+        <h1>AirClear Canada</h1>
+      </div>
+      <img class="geoImage" id="geoImage" src="./assets/noun_Geolocation_3098010_edited.svg" title="Click me to find Air Quality at your location!" alt="Geolocaion icon">
     </header>
 
     <main class="relative">
       <div id="map"></div>
       <aside>
-        <span id="closeButton"><i class="far fa-window-close"></i></span>
-        <ul>
-        </ul>
       </aside>
     </main>
 
 <img src="./assets/" alt="">
     <footer>
-      <div>
-        <h5><a href="https://github.com/OksanaSam" target="_blank" title="Oksana Samokhvalova Github page">Github: Oksana Samokhvalova</a></h4>
+      <div class="gitPersonal">
+        <h5><a href="https://github.com/OksanaSam" target="_blank" title="Github: Oksana Samokhvalova"><i class="fab fa-github"></i>Oksana Samokhvalova</a></h5>
       </div>
       <div>
-        <h5>Copyright &copy; Oksana Samokhvalova and Michael Currie 2020</h4>
+        <h5><a href="https://github.com/OksanaAndMikeCode/AirQualityApp" target="_blank" title="Air Quality App Github Project Repository"><i class="fas fa-code-branch"></i>Project Repo</a></h5>
+        <h5>&copy; Oksana Samokhvalova &amp; Michael Currie 2020</h5>
       </div>
-      <div>
-        <h5><a href="https://github.com/michacurri/" target="_blank" title="Michael Currie Github page">Github: Michael Currie</a></h4>
+      <div class="gitPersonal">
+        <h5><a href="https://github.com/michacurri/" target="_blank" title="Github: Michael Currie"><i class="fab fa-github"></i>Michael Currie</a></h5>
       </div>
     </footer>
   </div>
-
-
-
-
 
   <script src='https://code.jquery.com/jquery-3.4.0.min.js'
     integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>
@@ -62,5 +58,4 @@
   <script src='./apps/apps.js'></script>
 
 </body>
-
 </html>

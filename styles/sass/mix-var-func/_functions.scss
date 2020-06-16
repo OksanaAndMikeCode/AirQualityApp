@@ -5,5 +5,5 @@
 
 // font-size REM creator
 @function createREM($fontSize) {
-  @return ($fontSize * 0.1rem);
+  @return ($fontSize * 0.075rem);
 }
