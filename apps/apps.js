@@ -1,24 +1,26 @@
 //Namespacing
 const app = {};
 
-// OS JN-13 - 11:17: declared map in the global scope so that other functions can access it
-let map;
-
-// Creating an object to store all data on the chosen city
-app.dataObj = {};
-
-// Creating an array to store latitude and longitude of all cities in the chosen province
-app.latLngArray = [];
-// MC JN-12 - 21:20: changed the name above because it was capitalized 'LatLng'
-
-//Storing api key in a variable
+//Storing api keys in variables
 app.airApiKey = '69bdebb7-8ed2-400a-bcd2-24b56bacb155';
 app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
 app.unsplashApiKey = 'Ro76YKYpmutB58ImuEKT8izDBYKA669WYcjJWz-U6TA';
-
 // Consumer Secret: JuWwJGHxstRmxJUj
 
-//Creating a function for making a call to the Visual Air Api (aka ajax call) to get the cities array
+// Leaflet map variable
+app.map;
+
+// An object to store all data on the chosen city
+app.dataObj = {};
+
+// Variables for Unsplash results
+app.unsplashUrl;
+app.altTag;
+
+// An array to store latitude and longitude of all cities in the chosen province
+app.latLngArray = [];
+
+// A call to the Visual Air Api to get the province cities array
 app.getCitiesArray = (state) => {
   $.ajax({
     url: 'https://proxy.hackeryou.com',
@@ -38,7 +40,6 @@ app.getCitiesArray = (state) => {
       useCache: false
     }
   }).then(function (response) {
-    // console.log('Yay, I got a response', response.data[0]);
     // const provResp = response.data[0].city;
     const citiesArray = [];
     response.data.forEach((arrayItem) => {
@@ -46,7 +47,6 @@ app.getCitiesArray = (state) => {
       $('ul').html(`<li>${arrayItem.city}</li>`);
       console.log(arrayItem.city);
     });
-    // console.log(citiesArray);
 
     // MC JN-13 15:45: reduced the arrays 
 
@@ -84,24 +84,14 @@ app.getCitiesArray = (state) => {
         console.log(str);
 
       })
-      .fail(function () {
-        swal({
-          title: 'Sorry, cities cannot be found',
-          // text: 'Some text.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#DD6B55',
-          confirmButtonText: "Ok",
-          // cancelButtonText: 'No.'
-        })
-      });
+    })
+  .fail(function () {
+    swal({
+      title: 'Air quality is so good here that there is no need to measure it'
+    })
   });
 }
 
-let loc;
-let lat;
-let lng;
-// MC JN-12 - 21:20: amended latitude and longitude names to be shorter
 app.getLatLng = (citiesString) => {
   console.log(citiesString);
   // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
@@ -119,8 +109,10 @@ app.getLatLng = (citiesString) => {
       }
     })
     .then(function (response) {
-      // got a precise response
-      console.log(response.results[0].locations[0].adminArea5);
+      let loc;
+      let lat;
+      let lng;
+      // console.log(response.results[0].locations[0].adminArea5);
       for (i = 0; i < response.results.length; i++) {
         // loc = response.results[i].providedLocation.location;
         loc = response.results[i].locations[0].adminArea5;
@@ -133,41 +125,22 @@ app.getLatLng = (citiesString) => {
           lng
         });
       }
-
       // OS JN-13 - 11:17: adding popups of cities in the selected province using the lat lng data received from mapquest  
       for (let i = 0; i < app.latLngArray.length; i++) {
-        // console.log(i);
         L.marker([app.latLngArray[i].lat, app.latLngArray[i].lng])
           .bindPopup(app.latLngArray[i].loc)
           .openPopup()
-          .addTo(map)
-          // .on('click', function() { console.log(app.latLngArray[i].loc); })
+          .addTo(app.map)
           .on('click', function () {
-            const clickedCity = app.latLngArray[i].loc
-          // either need to process the result and remove ABBREVIATION, or create a new function to automatically do that.
+            const clickedCity = app.latLngArray[i].loc;
             app.grabMarker(clickedCity);
-          })
+          });
       }
-
-      // $(L.marker).on('click', app.onClick);
-      // $(L.marker).on('click', function() {
-      //   // console.log(L.marker);
-      //   let popup = marker.getPopup();
-      //   let content = popup.getContent();
-      //   console.log(content);
-      // })
     })
     .fail(function () {
       console.log('Lat Lng Response failed');
     });
 };
-
-
-// app.displayPopup = function(response) {
-//   console.log(response);
-
-//   L.marker([`${lat}, ${lng}`]).bindPopup(`${chosenCity}${dataObj}`);
-// };
 
 let abbreviation;
 // creating a function to get the chosen province name abbreviation
@@ -182,27 +155,36 @@ app.grabLiText = function () {
   app.getCityData(chosenCity, selectedProvince);
 };
 
-// declaring the variables for Unsplash results
-let unsplashUrl;
-let altTag;
-// creating a function to get a random image from Unsplash API
+// getting a random image from Unsplash API
 app.getImages = (photoLocation) => {
   $.ajax({
-      url: 'https://api.unsplash.com/photos/random',
-      method: 'GET',
-      dataType: 'json',
-      data: {
-          client_id: app.unsplashApiKey,
-          query: `${photoLocation} street`,
+    url: 'https://proxy.hackeryou.com',
+    method: 'GET',
+    dataType: 'json',
+    data: {
+      reqUrl: `https://api.unsplash.com/photos/random`,
+      params: {
+        client_id: app.unsplashApiKey,
+          query: photoLocation,
           orientation: 'landscape',
       },
+      proxyHeaders: {
+        'Some-Header': 'goes here'
+      },
+      xmlToJSON: false,
+      useCache: false
+    }
   }).then(function (response) {
-      unsplashUrl = response.urls.regular;
-      altTag = response.alt_description;
+      console.log(response);
+      app.unsplashUrl = response.urls.regular;
+      app.altTag = response.alt_description;
   })
-}
+  .fail(function () {
+    console.log("Unsplash failed");
+  })
+};
 
-//Creating a function for making a call to the Visual Air Api (aka ajax call) to get data on a specific city
+// A call to the Visual Air Api to get data on a specific city
 app.getCityData = (city, state) => {
   $.ajax({
       url: 'https://proxy.hackeryou.com',
@@ -229,18 +211,14 @@ app.getCityData = (city, state) => {
         pollution: response.data.current.pollution.aqius,
         temperature: response.data.current.weather.tp,
         humidity: response.data.current.weather.hu,
-        precipitation: response.data.current.weather.pr,
-        wind: response.data.current.weather.wd,
+        // precipitation: response.data.current.weather.pr,
+        // wind: response.data.current.weather.wd,
         windSpeed: response.data.current.weather.ws,
-        lat: response.data.location.coordinates[1],
-        lng: response.data.location.coordinates[0],
+        // lat: response.data.location.coordinates[1],
+        // lng: response.data.location.coordinates[0],
       };
       console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
       console.log(app.dataObj);
-
-      // calling the function to get images from unsplash API 
-      app.getImages(app.dataObj.city);
-
       // variable to store info that will be appended on click
       const appendInfo = `
       <div class="airInfo">
@@ -250,45 +228,33 @@ app.getCityData = (city, state) => {
         <h4 class="temperature"><i class="wi wi-thermometer"></i> ${response.data.current.weather.tp}<i class="wi wi-celsius"></i></h4>
         <h4 class="humidity"><i class="wi wi-humidity"></i> ${response.data.current.weather.hu}</h4>
         <h4 class="wind"><i class="wi wi-wind-direction"></i> ${response.data.current.weather.ws} m/s</h4>
-        <img class="unsplashImg" src="${unsplashUrl}" alt="${altTag}">
+        <img class="unsplashImg" src="${app.unsplashUrl}" alt="${app.altTag}">
       </div>`;
       // making aside visible to the user
       $('aside').show().html(appendInfo);
     })
     .fail(function () {
       swal({
-        title: 'Sorry, your city cannot be found',
-        // text: 'Some text.',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: "Ok",
-        // cancelButtonText: 'No.'
+        title: 'Sorry, air quality data on your city cannot be found',
       })
     });
 };
 
-
-
-
-
-// creating a function to pass the clicked marker to Air Visual API
+// Passing the clicked marker to Air Visual API to get the date in the clicked city
 app.grabMarker = function (marker) {
-  // let chosenMarker = L.marker.getContent();
-  // let chosenMarker = $(this).getContent();
-  // console.log(chosenMarker);
-  console.log(marker);
-  
+  // console.log(marker);
   app.getCityData(marker, provClicked);
 };
 
-let selectedProvince;
-app.grabInput = () => {
-  selectedProvince = $('.province').children("option:selected").val();
-  alert("You have selected the province - " + selectedProvince);
-  console.log(selectedProvince);
-  app.getCitiesArray(selectedProvince);
-};
+
+// Probably we don't need this anymore
+// let selectedProvince;
+// app.grabInput = () => {
+//   selectedProvince = $('.province').children("option:selected").val();
+//   alert("You have selected the province - " + selectedProvince);
+//   console.log(selectedProvince);
+//   app.getCitiesArray(selectedProvince);
+// };
 
 
 //////////////////////////////////////
@@ -298,11 +264,11 @@ app.leafletMap = () => {
 
   /////////////////////////
   // LEAFLET MAP: INITIALIZATION
-  map = L.map('map').setView([60, -95], 4);
+  app.map = L.map('map').setView([60, -95], 4);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+  }).addTo(app.map);
 
   const getGeoJson = "../assets/provGeo.json"
   // const getGeoJson = "https://thisdude.codes/pages/airQualityApp/assets/provGeo.json";
@@ -318,8 +284,10 @@ app.leafletMap = () => {
           abbreviation = feature.properties.PREABBR;
           // app.grabInput(provClicked);
           console.log(provClicked, abbreviation);
-          // OS JN-14 20:47: making API call using the clicked province
+          // OS JN-14 20:47: making Air Visual API call using the clicked province
           app.getCitiesArray(provClicked);
+          // making Unsplash API call using the clicked province
+          app.getImages(provClicked);
           // hiding aside once the user clicks on the province
           $('aside').hide();
 
@@ -337,15 +305,13 @@ app.leafletMap = () => {
           weight: 0.5
         }
       }
-    }).addTo(map);
+    }).addTo(app.map);
   });
-
-
 }
 
 
 // ------------New Feature--------- //
-// a function to get browser geolocaion 
+// Getting browser geolocaion 
 app.getCurrentLocation = function() {
   $('aside').hide();
   navigator.geolocation.getCurrentPosition(function(location) {
@@ -354,14 +320,14 @@ app.getCurrentLocation = function() {
       currentLat = location.coords.latitude;
       currentLng = location.coords.longitude;
        // creating a popup for current location
-       L.marker([currentLat, currentLng]).addTo(map)
+       L.marker([currentLat, currentLng]).addTo(app.map)
        .bindPopup('You are here!')
        .openPopup()
       app.getCurrentAirData(currentLat, currentLng);
   });
 };
 
-// making a call to the Visual Air Api to get data on the current location
+// A call to the Visual Air Api to get data on the current location
 app.getCurrentAirData = (latitude, longitude) => {
   $.ajax({
       url: 'https://proxy.hackeryou.com',
@@ -396,30 +362,24 @@ app.getCurrentAirData = (latitude, longitude) => {
     })
     .fail(function () {
       swal({
-        title: 'Sorry, unable to retrieve your location',
-        // text: 'Some text.',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: "Ok",
-        // cancelButtonText: 'No.'
+        title: 'Sorry, unable to retrieve your location'
       })
     });
 };
 // ------------End of New Feature--------- //
 
 
-//Creating an init function
+// Init function
 app.init = function () {
   app.leafletMap();
-  $(".province").change(app.getProvinceAbbrev);
-  $(".province").change(app.grabInput);
+  $('.province').change(app.getProvinceAbbrev);
+  $('.province').change(app.grabInput);
   $('ul').on('click', 'li', app.grabLiText);
  // getting current location data on geo image click - NEW FEATURE
   $('#geoImage').on('click', app.getCurrentLocation);
 };
 
-//Creating document ready
+// Document ready
 $(document).ready(function () {
   app.init();
 });
