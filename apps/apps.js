@@ -7,7 +7,7 @@ app.mapApiKey = 'EPSBNGNeFxHPINGRYzr7X1Sgyh8vyQpV';
 app.unsplashApiKey = 'Ro76YKYpmutB58ImuEKT8izDBYKA669WYcjJWz-U6TA';
 
 // Leaflet map variables
-app.map; 
+app.map;
 app.markerGroup;
 
 // An object to store all data on the chosen city
@@ -24,67 +24,47 @@ let abbreviation;
 // A call to the Visual Air Api to get the province cities array
 app.getCitiesArray = (state) => {
   $.ajax({
-    url: 'https://proxy.hackeryou.com',
-    method: 'GET',
-    dataType: 'json',
-    data: {
-      reqUrl: `https://api.airvisual.com/v2/cities`,
-      params: {
-        state: state,
-        country: 'Canada',
-        key: app.airApiKey,
-      },
-      proxyHeaders: {
-        'Some-Header': 'goes here'
-      },
-      xmlToJSON: false,
-      useCache: false
-    }
-  }).then(function (response) {
-    const citiesArray = [];
-    response.data.forEach((arrayItem) => {
-      citiesArray.push(arrayItem.city);
-    });
-    
-    const pushLocEq = [];
-    const mapQString = [];
+      url: 'https://proxy.hackeryou.com',
+      method: 'GET',
+      dataType: 'json',
+      data: {
+        reqUrl: `https://api.airvisual.com/v2/cities`,
+        params: {
+          state: state,
+          country: 'Canada',
+          key: app.airApiKey,
+        },
+        proxyHeaders: {
+          'Some-Header': 'goes here'
+        },
+        xmlToJSON: false,
+        useCache: false
+      }
+    }).then(function (response) {
+      const citiesArray = [];
+      response.data.forEach((arrayItem) => {
+        citiesArray.push(arrayItem.city);
+      });
 
-    // BEFORE SUBMISSION: remove the shift and the "&location=" in the URL API call. 
-    // MC JN-13 15:45: Shift the first element of the returned array so that it doesn't receive "location=" as it will break the API call. It will be unshifted after the following forEach.
-    const shiftCity = citiesArray.shift();
-    console.log(shiftCity);
-
-    // MC JN-13 15:45: append the abbreviation to shiftCity and rename it firstCity
-    const firstCity = (`${shiftCity},${abbreviation}`);
-    console.log(firstCity);
-
-    // MC JN-13 15:45: Loop to add "location=" in front of each city, and abbreviation behind
-    citiesArray.forEach((city) => {
-      pushLocEq.push(`location=${city},${abbreviation}`);
-    });
-
-    console.log(pushLocEq);
-
-    // MC JN-13 15:45: put the firstCity back in front before adding "&" between everything
-    pushLocEq.unshift(firstCity);
-    console.log(pushLocEq);
-
-    mapQString.push(pushLocEq.join(`&`));
-
-    console.log(mapQString);
-
-    // getting latitude and longitude of every city in the cities array by making an ajax call to MapQuest API
-    app.getLatLng(mapQString);
+      const pushLocEq = [];
+      const mapQString = [];
+      const shiftCity = citiesArray.shift();
+      const firstCity = (`${shiftCity},${abbreviation}`);
+      citiesArray.forEach((city) => {
+        pushLocEq.push(`location=${city},${abbreviation}`);
+      });
+      pushLocEq.unshift(firstCity);
+      mapQString.push(pushLocEq.join(`&`));
+      app.getLatLng(mapQString);
     })
-  .fail(function () {
-    swal({
-      title: 'Air quality is so good here that there is no need to measure it'
-    })
-  });
+    .fail(function () {
+      swal({
+        title: 'Air quality is so good here that there is no need to measure it'
+      })
+    });
 }
 
 app.getLatLng = (citiesString) => {
-  // BEFORE SUBMISSION: remove the shift from above and the "&location=" in the URL below. 
   $.ajax({
       url: 'https://proxy.hackeryou.com',
       method: 'GET',
@@ -125,7 +105,6 @@ app.getLatLng = (citiesString) => {
       }
     })
     .fail(function () {
-      console.log('Lat Lng Response failed');
     });
 };
 
@@ -139,8 +118,8 @@ app.getImages = (photoLocation) => {
       reqUrl: `https://api.unsplash.com/photos/random`,
       params: {
         client_id: app.unsplashApiKey,
-          query: `${photoLocation} landscape`,
-          orientation: 'landscape',
+        query: `${photoLocation} landscape`,
+        orientation: 'landscape',
       },
       proxyHeaders: {
         'Some-Header': 'goes here'
@@ -149,8 +128,8 @@ app.getImages = (photoLocation) => {
       useCache: false
     }
   }).then(function (response) {
-      app.unsplashUrl = response.urls.regular;
-      app.altTag = response.alt_description;
+    app.unsplashUrl = response.urls.regular;
+    app.altTag = response.alt_description;
   })
 };
 
@@ -183,8 +162,6 @@ app.getCityData = (city, state) => {
         humidity: response.data.current.weather.hu,
         windSpeed: response.data.current.weather.ws,
       };
-      console.log(`The air quality in ${city}, ${state} is ${response.data.current.pollution.aqius}. The current temperature is ${response.data.current.weather.tp} degrees Celcius.`);
-      console.log(app.dataObj);
       // variable to store info that will be appended on click
       const appendInfo = `
       <div class="airInfo">
@@ -211,13 +188,7 @@ app.grabMarker = function (marker) {
   app.getCityData(marker, provClicked);
 };
 
-//////////////////////////////////////
-// LEAFLET IMPLEMENTATION
-
 app.leafletMap = () => {
-
-  /////////////////////////
-  // LEAFLET MAP: INITIALIZATION
   app.map = L.map('map').setView([60, -95], 4);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -240,23 +211,9 @@ app.leafletMap = () => {
           app.getImages(provClicked);
           // hiding aside once the user clicks on the province
           $('aside').hide();
-      });
+        });
         featureLayer.bindPopup(feature.properties.PRENAME);
       },
-        // onEachFeature: function style(feature) {
-        //   return {
-        //     fillColor: feature.properties.ALBERTA,
-        //     weight: 2,
-        //     opacity: 0.5,
-        //     color: 'white',
-        //     dashArray: '3',
-        //     fillOpacity: 0.3
-        //   };
-        // }
-        // L.geoJson(data, {style: style}).addTo(app.map);
-       
-      // MC 06-13 09:30: change color of layer and line weight
-      // STYLE IS NOT APPENDING
       style: function (feature, featureLayer) {
         return {
           color: '#257eca',
@@ -265,35 +222,36 @@ app.leafletMap = () => {
       }
     }).addTo(app.map);
   });
-  L.marker([49.8951, -97.1384]).addTo(app.map).bindPopup('Manitoba').openPopup();
-  L.marker([43.6532, -79.3832]).addTo(app.map).bindPopup('Ontario').openPopup();
-  L.marker([64.2823, -135.0000]).addTo(app.map).bindPopup('Yukon').openPopup();
-  L.marker([64.8255, -124.8457]).addTo(app.map).bindPopup('Northwest Territories').openPopup();
-  L.marker([46.5107, -63.4168]).addTo(app.map).bindPopup('Prince Edward Island').openPopup();
-  L.marker([53.1355, -57.6604]).addTo(app.map).bindPopup('Newfoundland and Labrador').openPopup();
-  L.marker([46.8139, -71.2080]).addTo(app.map).bindPopup('Quebec').openPopup();
-  L.marker([53.9333, -116.5765]).addTo(app.map).bindPopup('Alberta').openPopup();
-  L.marker([52.9399, -106.4509]).addTo(app.map).bindPopup('Saskatchewan').openPopup();
-  L.marker([70.2998, -83.1076]).addTo(app.map).bindPopup('Nunavut').openPopup();
-  L.marker([44.6820, -63.7443]).addTo(app.map).bindPopup('Nova Scotia').openPopup();
-  L.marker([46.5653, -66.4619]).addTo(app.map).bindPopup('New Brunswick').openPopup();
-  L.marker([53.7267, -127.6476]).addTo(app.map).bindPopup('British Columbia').openPopup();
-  
+  // initial province labels
+  L.marker([49.8951, -97.1384]).bindTooltip('Manitoba', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([51.6532, -86.3832]).bindTooltip('Ontario', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([64.2823, -135.0000]).bindTooltip('Yukon', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([64.8255, -124.8457]).bindTooltip('Northwest Territories', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([46.5107, -63.4168]).bindTooltip('Prince Edward Island', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([47.5655, -52.7104]).bindTooltip('Newfoundland and Labrador', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([51.8139, -73.2080]).bindTooltip('Quebec', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([53.9333, -116.5765]).bindTooltip('Alberta', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([52.9399, -106.4509]).bindTooltip('Saskatchewan', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([63.7616, -68.5014]).bindTooltip('Nunavut', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([44.6820, -63.7443]).bindTooltip('Nova Scotia', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([46.5653, -66.4619]).bindTooltip('New Brunswick', {permanent: true}).openTooltip().addTo(app.map);
+  L.marker([53.7267, -127.6476]).bindTooltip('British Columbia', {permanent: true}).openTooltip().addTo(app.map);
+
 }
 
 // Getting browser geolocaion 
-app.getCurrentLocation = function() {
+app.getCurrentLocation = function () {
   $('aside').hide();
-  navigator.geolocation.getCurrentPosition(function(location) {
-      let currentLat;
-      let currentLng;
-      currentLat = location.coords.latitude;
-      currentLng = location.coords.longitude;
-       // creating a popup for current location
-       L.marker([currentLat, currentLng]).addTo(app.map)
-       .bindPopup('You are here!')
-       .openPopup()
-      app.getCurrentAirData(currentLat, currentLng);
+  navigator.geolocation.getCurrentPosition(function (location) {
+    let currentLat;
+    let currentLng;
+    currentLat = location.coords.latitude;
+    currentLng = location.coords.longitude;
+    // creating a popup for current location
+    L.marker([currentLat, currentLng]).addTo(app.map)
+      .bindPopup('You are here!')
+      .openPopup()
+    app.getCurrentAirData(currentLat, currentLng);
   });
 };
 
@@ -327,7 +285,6 @@ app.getCurrentAirData = (latitude, longitude) => {
         <h4 class="wind"><i class="wi wi-wind-direction"></i> ${response.data.current.weather.ws} m/s</h4>
       </div>`;
       $('aside').show().html(appendInfo);
-      console.log(response.data.city, response.data.state, response.data.current.weather, response.data.current.pollution);
     })
     .fail(function () {
       swal({

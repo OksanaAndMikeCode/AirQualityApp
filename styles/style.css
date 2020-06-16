@@ -297,7 +297,7 @@ h1 {
 
 @media only screen and (min-width: 769px) {
   h1 {
-    font-size: 5rem;
+    font-size: 3.75rem;
   }
 }
 
@@ -310,14 +310,14 @@ h2 {
 
 @media only screen and (min-width: 769px) {
   h2 {
-    font-size: 3.6rem;
+    font-size: 2.7rem;
   }
 }
 
 h3 {
   font-family: 'Lato', sans-serif;
-  font-size: 3.2vw;
-  color: #5CD3FF;
+  font-size: 6vw;
+  color: #f1eee9;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -325,31 +325,33 @@ h3 {
 
 @media only screen and (min-width: 769px) {
   h3 {
-    font-size: 3.2rem;
+    font-size: 4.5rem;
   }
 }
 
 h4 {
   font-family: 'Lato', sans-serif;
   font-size: 5vw;
-  color: #5CD3FF;
+  color: #f1eee9;
 }
 
 @media only screen and (min-width: 769px) {
   h4 {
-    font-size: 5rem;
+    font-size: 3.75rem;
   }
 }
 
 h5 {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-size: 2vw;
   color: #5CD3FF;
+  text-align: center;
+  padding: 1vw;
 }
 
 @media only screen and (min-width: 769px) {
   h5 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 }
 
@@ -359,7 +361,7 @@ ul {
 
 @media only screen and (min-width: 769px) {
   ul {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
   }
 }
 
@@ -370,7 +372,18 @@ p {
 
 @media only screen and (min-width: 769px) {
   p {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
+  }
+}
+
+a {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.8vw;
+}
+
+@media only screen and (min-width: 769px) {
+  a {
+    font-size: 1.35rem;
   }
 }
 
@@ -401,7 +414,7 @@ i {
 
 @media only screen and (min-width: 769px) {
   i {
-    font-size: 5rem;
+    font-size: 3.75rem;
   }
 }
 
@@ -435,6 +448,8 @@ header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 
 @media only screen and (min-width: 769px) {
@@ -443,23 +458,25 @@ header {
   }
 }
 
-header #logo {
-  -ms-grid-column-align: center;
-      justify-self: center;
-  text-align: center;
+header .logoHeader {
   -ms-grid-column: 1;
   grid-column: 1;
   -ms-grid-row: 1;
   grid-row: 1;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-header h1 {
-  -ms-grid-column-align: center;
-      justify-self: center;
-  -ms-grid-column: 2;
-  grid-column: 2;
-  -ms-grid-row: 1;
-  grid-row: 1;
+header .logoHeader #logo {
+  text-align: center;
+}
+
+header .logoHeader h1 {
+  text-align: center;
 }
 
 header #geoImage {
@@ -521,28 +538,35 @@ aside {
 aside .airInfo {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 3fr;
-      grid-template-columns: 3fr;
-  -ms-grid-rows: 6fr;
-      grid-template-rows: 6fr;
+  -ms-grid-columns: 4fr;
+      grid-template-columns: 4fr;
+  -ms-grid-rows: 5fr;
+      grid-template-rows: 5fr;
   grid-column-gap: 1vw;
   grid-row-gap: 1vw;
   min-width: 0;
   min-height: 0;
+  padding: 2vw;
 }
 
 aside .airInfo .location {
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
   grid-column: 1 / 2;
-  text-align: center;
 }
 
 aside .airInfo .pollution {
-  -ms-grid-column: 1;
-  grid-column: 1;
-  -ms-grid-row: 2;
-  grid-row: 2;
+  -ms-grid-column: 3;
+  grid-column: 3;
+  -ms-grid-row: 1;
+  grid-row: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-item-align: center;
+      align-self: center;
+  justify-self: center;
+  padding: 0 1vw;
 }
 
 aside .airInfo .temperature {
@@ -571,19 +595,26 @@ aside .airInfo .wind {
 
 aside .airInfo .weatherIcon {
   width: 11vw;
-  -ms-grid-column: 2;
-  grid-column: 2;
-  -ms-grid-row: 1;
-  grid-row: 1;
+  -ms-grid-column: 1;
+  grid-column: 1;
+  -ms-grid-row: 2;
+  grid-row: 2;
 }
 
 aside .airInfo img {
-  grid-column: 2 / -1;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 2;
+  grid-column: 2 / 4;
   -ms-grid-row: 2;
-  -ms-grid-row-span: 3;
-  grid-row: 2 / 5;
-  width: 30vw;
-  min-width: 0;
+  -ms-grid-row-span: 4;
+  grid-row: 2 / 6;
+  width: 48vw;
+  max-width: 500px;
+  color: #f1eee9;
+}
+
+aside .airInfo i {
+  color: #f1eee9;
 }
 
 footer {
@@ -605,6 +636,26 @@ footer {
   }
 }
 
-footer h5 {
-  margin: 0 4vw;
+footer i {
+  font-size: 2vw;
+  color: #000;
+}
+
+@media only screen and (min-width: 769px) {
+  footer i {
+    font-size: 1.5rem;
+  }
+}
+
+footer .gitPersonal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 2vw;
 }
