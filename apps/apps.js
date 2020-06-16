@@ -193,7 +193,7 @@ app.getImages = (photoLocation) => {
       dataType: 'json',
       data: {
           client_id: app.unsplashApiKey,
-          query: `${photoLocation} street`,
+          query: `${photoLocation}`,
           orientation: 'landscape',
       },
   }).then(function (response) {

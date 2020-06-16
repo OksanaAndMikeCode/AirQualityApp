@@ -1,25 +1,53 @@
 .gridWrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 0.75fr 9fr 0.25fr;
+  grid-template-rows: 1fr 8fr 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+
+
+  @include media (tablet) {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1.5fr 7fr 1.5fr;
   } 
+}
+
+i {
+  font-size: createVW($h4FontSize);
+  color: $textColour;
+
+  @include media(tablet) {
+    font-size: createREM($h4FontSize);
+  }
+}
+
+.logo {
+  width: 8vw;
+
+  @include media(tablet) {
+    width: 5vw;
+  }
+}
+
+.geoImage {
+  width: 8vw;
+  
+  @include media(tablet) {
+    width: 5vw;
+  }
+}
 
 header {
   height: 10vh;
+  display: grid;
   grid-column: 1 / -1;
   grid-row: 1;
-  
-  // justify-content: center;
   align-items: center;
-
-  display: grid;
-  // grid-template-columns: 4fr;
-  // grid-template-rows: 1fr;
-  // grid-column-gap: 0px;
-  // grid-row-gap: 0px;
   
+  @include media (tablet) {
+    height: 15vh;
+  }
+
   #logo {
     justify-self: center;
     text-align: center;
@@ -27,22 +55,21 @@ header {
     grid-row: 1;
   }
   
+  h1 {
+    justify-self: center;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   #geoImage {
     justify-self: center;
     grid-column: 3;
     grid-row: 1;
   }
-
-  #province {
-    // label is hiding behind #province
-    text-align: center;
-    grid-column: 2;
-    grid-row: 1
-  }
 }
 
 main {
-  height: 85vh;
+  height: 80vh;
   grid-column: 1 / -1;
   grid-row: 2;
   
@@ -51,41 +78,46 @@ main {
   grid-template-rows: 4fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  
+  @include media (tablet) {
+    height: 70vh;
+  }
 
   #map {
     z-index: 0;
   }
   
   aside {
-    right: 50px;
-    top: 50px;
-
     grid-column: 1 / -1;
-    grid-row: 2 / 4;
-
+    grid-row: 2;
     display: none;
-    @include absolute;
     height: fit-content;
-    width: 400px;
-    background-color: $primaryColour;
+    background-color: $accentColour;
     padding: right;
     z-index: 50;
     padding-left: 10px;
     box-shadow: 10px 10px 5px 0px rgba(37, 126, 202, 0.5);
+    
+    img {
+      width: 50px;
+    }
   }
 }
 
-i {
-  font-size: 32px;
-  color: $textColour;
-}
-
-img {
-  width: 50px;
-}
-
 footer {
-  height: 5vh;
+  height: 10vh;
   grid-column: 1 / -1;
   grid-row: 3;
+
+  display: flex;
+  justify-content: space-between;
+
+  @include media (tablet) {
+    height: 15vh;
+  }
+
+  h5 {
+    margin: 4vw;
+  }
+
 }

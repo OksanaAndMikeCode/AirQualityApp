@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Monoton&family=Oxanium:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@200&display=swap");
 html {
   line-height: 1.15;
   -ms-text-size-adjust: 100%;
@@ -14,7 +14,6 @@ article, aside, footer, header, nav, section {
 }
 
 h1 {
-  font-size: 2em;
   margin: .67em 0;
 }
 
@@ -240,56 +239,8 @@ html {
   font-size: 62.5%;
 }
 
-h1 {
-  font-family: 'Monoton', cursive;
-  font-size: 2.5vw;
-}
-
-@media only screen and (min-width: 1000px) {
-  h1 {
-    font-size: 15rem;
-  }
-}
-
-h2 {
-  font-family: 'Monoton', cursive;
-  font-size: 2vw;
-  margin-bottom: 1vw;
-  color: #5CD3FF;
-}
-
-@media only screen and (min-width: 1000px) {
-  h2 {
-    font-size: 12rem;
-    margin-bottom: 2rem;
-  }
-}
-
-h3 {
-  font-family: 'Oxanium', cursive;
-  font-size: 1.66667vw;
-  color: #5CD3FF;
-}
-
-@media only screen and (min-width: 1000px) {
-  h3 {
-    font-size: 10rem;
-  }
-}
-
-p {
-  font-family: 'Audiowide', cursive;
-  font-size: 1.5vw;
-}
-
-@media only screen and (min-width: 1000px) {
-  p {
-    font-size: 9rem;
-  }
-}
-
 .innerWrapper {
-  max-width: 1200px;
+  max-width: 1000px;
   height: 100%;
   margin: 0 auto;
 }
@@ -326,7 +277,89 @@ p {
 }
 
 h1 {
-  font-size: 20rem;
+  font-family: 'Raleway', sans-serif;
+  color: #257eca;
+  font-size: 5vw;
+  margin: 0.25vw;
+}
+
+@media only screen and (min-width: 769px) {
+  h1 {
+    font-size: 5rem;
+  }
+}
+
+h2 {
+  font-family: 'Lato', sans-serif;
+  font-size: 3.6vw;
+  margin: 0.25vw;
+  color: #5CD3FF;
+}
+
+@media only screen and (min-width: 769px) {
+  h2 {
+    font-size: 3.6rem;
+  }
+}
+
+h3 {
+  font-family: 'Lato', sans-serif;
+  font-size: 3.2vw;
+  color: #5CD3FF;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+@media only screen and (min-width: 769px) {
+  h3 {
+    font-size: 3.2rem;
+  }
+}
+
+h4 {
+  font-family: 'Lato', sans-serif;
+  font-size: 5vw;
+  color: #5CD3FF;
+}
+
+@media only screen and (min-width: 769px) {
+  h4 {
+    font-size: 5rem;
+  }
+}
+
+h5 {
+  font-family: 'Lato', sans-serif;
+  font-size: 2vw;
+  color: #5CD3FF;
+}
+
+@media only screen and (min-width: 769px) {
+  h5 {
+    font-size: 2rem;
+  }
+}
+
+ul {
+  font-size: 1.8vw;
+}
+
+@media only screen and (min-width: 769px) {
+  ul {
+    font-size: 1.8rem;
+  }
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.8vw;
+}
+
+@media only screen and (min-width: 769px) {
+  p {
+    font-size: 1.8rem;
+  }
 }
 
 .gridWrap {
@@ -334,22 +367,68 @@ h1 {
   display: grid;
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
-  -ms-grid-rows: 0.75fr 9fr 0.25fr;
-      grid-template-rows: 0.75fr 9fr 0.25fr;
+  -ms-grid-rows: 1fr 8fr 1fr;
+      grid-template-rows: 1fr 8fr 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
 }
 
+@media only screen and (min-width: 769px) {
+  .gridWrap {
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
+    -ms-grid-rows: 1.5fr 7fr 1.5fr;
+        grid-template-rows: 1.5fr 7fr 1.5fr;
+  }
+}
+
+i {
+  font-size: 5vw;
+  color: #000;
+}
+
+@media only screen and (min-width: 769px) {
+  i {
+    font-size: 5rem;
+  }
+}
+
+.logo {
+  width: 8vw;
+}
+
+@media only screen and (min-width: 769px) {
+  .logo {
+    width: 5vw;
+  }
+}
+
+.geoImage {
+  width: 8vw;
+}
+
+@media only screen and (min-width: 769px) {
+  .geoImage {
+    width: 5vw;
+  }
+}
+
 header {
   height: 10vh;
+  display: -ms-grid;
+  display: grid;
   grid-column: 1 / -1;
   -ms-grid-row: 1;
   grid-row: 1;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  display: -ms-grid;
-  display: grid;
+}
+
+@media only screen and (min-width: 769px) {
+  header {
+    height: 15vh;
+  }
 }
 
 header #logo {
@@ -358,6 +437,15 @@ header #logo {
   text-align: center;
   -ms-grid-column: 1;
   grid-column: 1;
+  -ms-grid-row: 1;
+  grid-row: 1;
+}
+
+header h1 {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  -ms-grid-column: 2;
+  grid-column: 2;
   -ms-grid-row: 1;
   grid-row: 1;
 }
@@ -371,16 +459,8 @@ header #geoImage {
   grid-row: 1;
 }
 
-header #province {
-  text-align: center;
-  -ms-grid-column: 2;
-  grid-column: 2;
-  -ms-grid-row: 1;
-  grid-row: 1;
-}
-
 main {
-  height: 85vh;
+  height: 80vh;
   grid-column: 1 / -1;
   -ms-grid-row: 2;
   grid-row: 2;
@@ -394,24 +474,25 @@ main {
   grid-row-gap: 0px;
 }
 
+@media only screen and (min-width: 769px) {
+  main {
+    height: 70vh;
+  }
+}
+
 main #map {
   z-index: 0;
 }
 
 main aside {
-  right: 50px;
-  top: 50px;
   grid-column: 1 / -1;
   -ms-grid-row: 2;
-  -ms-grid-row-span: 2;
-  grid-row: 2 / 4;
+  grid-row: 2;
   display: none;
-  position: absolute;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  width: 400px;
-  background-color: #aad3e0;
+  background-color: #257eca;
   padding: right;
   z-index: 50;
   padding-left: 10px;
@@ -419,18 +500,29 @@ main aside {
           box-shadow: 10px 10px 5px 0px rgba(37, 126, 202, 0.5);
 }
 
-i {
-  font-size: 32px;
-  color: #000;
-}
-
-img {
+main aside img {
   width: 50px;
 }
 
 footer {
-  height: 5vh;
+  height: 10vh;
   grid-column: 1 / -1;
   -ms-grid-row: 3;
   grid-row: 3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+@media only screen and (min-width: 769px) {
+  footer {
+    height: 15vh;
+  }
+}
+
+footer h5 {
+  margin: 4vw;
 }
