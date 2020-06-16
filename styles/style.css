@@ -472,7 +472,8 @@ header #geoImage {
 }
 
 header #geoImage:hover, header #geoImage:focus {
-  background-color: #aad3e0;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 main {
